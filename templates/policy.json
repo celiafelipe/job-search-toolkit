@@ -1,0 +1,16 @@
+{
+  "mode": "preparation-only",
+  "actions": [],
+  "selection": "listed_roles",
+  "role_ids": [],
+  "destination_hosts": [],
+  "destination_prefixes": [],
+  "rubric_sha256": null,
+  "search_preferences_sha256": null,
+  "min_score": null,
+  "authorized_by": null,
+  "authorized_at": null,
+  "expires_at": null,
+  "evidence": null,
+  "simulation": false
+}

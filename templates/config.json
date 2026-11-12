@@ -1,0 +1,10 @@
+{
+  "profile": "profile.md",
+  "master_cv": "master-cv.md",
+  "career_evidence": ["career-evidence.md"],
+  "search_preferences": "search-preferences.md",
+  "rubric": "rubric.md",
+  "answer_policy": "answer-policy.md",
+  "policy": "policy.json",
+  "roles_directory": "roles"
+}

@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env*
+private/
+workspace/
+output/
+tmp/
+*.pdf
+*.png
+*.sqlite*
+ledger.json
+.ledger.lock
