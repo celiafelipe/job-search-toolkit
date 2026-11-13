@@ -22,11 +22,11 @@ Tell them the setup gets them started quickly, and that their career file improv
 The toolkit root is the folder containing `toolkit/` and `skills/`, two levels above this skill's folder (when installed as a plugin, that is inside the plugin's install folder). Each shell command may start in a different folder, so always run commands as `cd "<toolkit root>" && python3 -m toolkit ...`:
 
 ```sh
-python3 -m toolkit doctor
+python3 -m toolkit --workspace "<workspace, default ~/Documents/Job Search>" doctor
 ```
 
-- If `python3` is missing or older than 3.10, explain and help install it (macOS: `xcode-select --install` or python.org; Linux: the package manager).
-- If `pdf_ready` is false, show the `fix` hints from `doctor` in plain words and offer to run the install command for them. Ask permission before installing anything.
+- Python 3.9 or newer is enough, so the Python that comes with a Mac works; `doctor` reports `python_ok`. Only if `python3` is missing entirely, help install it (macOS: `xcode-select --install`, which opens Apple's installer; Linux: the package manager).
+- If `pdf_ready` is false, show the `fix` hints from `doctor` in plain words and offer to run the install command for them. Ask permission before installing anything. On a Mac without Homebrew, the candidate has to run Homebrew's installer themselves because it asks for their password: give them the exact steps, then carry on.
 - Windows is not supported yet; suggest WSL or a Mac or Linux machine.
 - PDF tools are only needed for the final CV PDF. Setup can continue without them.
 
@@ -56,7 +56,7 @@ From the sources, create:
 
 - **`experience/YYYY-organization.md`**, one per role, from `experience/_role-template.md`. Fill only what the sources state. Add a provenance line such as `- 2030-01-15 | CV import (sources/cv.docx) | unconfirmed | all roles and bullets` (format in [the learning loop](../../docs/LEARNING-LOOP.md#provenance-lines)).
 - **`experience/INDEX.md`**: one row per role with a depth rating. Most roles start as `thin`.
-- **`master-cv.md`** in the supported format (headings, paragraphs, dash lists, `**bold**`), following [the CV craft guide](../job-prepare/references/cv-craft.md). Keep their content and wording faithfully: this is their master copy, not a tailored version. Formatting is not content, so do adapt it: use the section headings for their career track (their "Profile" becomes "Executive summary" for an executive, for example), and replace em dashes with commas, colons or parentheses. For the executive track, add an executive summary and key achievements built only from what the sources state. The CV itself can't hold review notes (anything you add would end up in the PDF), so list every line you drafted rather than transcribed under a "Master CV: to review" heading in `open-questions.md`, and walk them through it in step 4's summary. Then run `python3 -m toolkit --workspace "<workspace>" check-cv master-cv.md` to confirm the format is supported. Never edit their original file in `sources/`.
+- **`master-cv.md`** in the supported format (headings, paragraphs, dash lists, `**bold**`), following [the CV craft guide](../job-prepare/references/cv-craft.md). Keep their content faithfully: the facts, numbers, roles and claims are theirs, and this is their master copy, not a tailored version. Style is not content, so do adapt it to [the CV craft guide](../job-prepare/references/cv-craft.md): section headings for their career track (their "Profile" becomes "Executive summary" for an executive), no em dashes, no first person, and no self-labels or AI-sounding words ("passionate", "data-driven", "spearheaded"). Keep their own phrasing wherever it already fits these rules, and show them every line you restyled in step 4's summary. For the executive track, add an executive summary and key achievements built only from what the sources state. The CV itself can't hold review notes (anything you add would end up in the PDF), so list every line you drafted rather than transcribed under a "Master CV: to review" heading in `open-questions.md`, and walk them through it in step 4's summary. Then run `python3 -m toolkit --workspace "<workspace>" check-cv master-cv.md` to confirm the format is supported. Never edit their original file in `sources/`.
 - **`profile.md`**: name, contact details, languages, and the career track (`executive`, `senior` or `standard`), inferred from titles and scope and then confirmed with them.
 - **`career-story.md`**: a short draft of their positioning and career arc, clearly marked as a draft for them to react to.
 
@@ -90,6 +90,8 @@ Offer two paths and let them choose:
 - **Jump into a real job:** paste a job ad or link, and you will screen it ([job-screen](../job-screen/SKILL.md)). You will tell them what's strong for that role and ask about the gaps that matter, so their career file grows with every job ([learning loop](../../docs/LEARNING-LOOP.md)).
 
 ## Rules
+
+- The core rules in [job-search](../job-search/SKILL.md#core-rules) apply here too.
 
 - Never ask them to run commands or edit JSON. If an action needs their computer password (for example installing software), explain why and let them run that one step.
 - Do not import another candidate's files or policies. The default application policy is preparation only; changing it is a separate, explicit decision covered in [the application guide](../../docs/APPLY.md).

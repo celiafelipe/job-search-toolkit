@@ -2,6 +2,8 @@
 
 One row per role, most recent first. The agent keeps this table current so you can see at a glance which parts of your career are well documented.
 
+Dates: `YYYY-MM – YYYY-MM` (or `now`).
+
 Depth:
 - `thin`: only what the CV or LinkedIn says, nothing confirmed yet.
 - `ok`: the context is confirmed, plus at least two accomplishments with a confirmed outcome (a number with a baseline, or a qualitative result the candidate stated).

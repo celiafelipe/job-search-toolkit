@@ -53,7 +53,7 @@ Save `answers.json` with `role_id` and `fields`, a list of `{"prompt": "Exact pr
 Build only PDFs the form accepts. Use UTF-8 plain Markdown: headings with one to three hash signs, plain paragraphs separated by blank lines, and dash lists. Use literal URLs and plain text; `**bold**` is the only inline markup. No HTML, tables, images, italics or links. Put role, employer and dates together on a subheading; natural page breaks, no fixed page count. Start a fresh output directory:
 
 ```sh
-python3 -m toolkit build-pdf roles/role-1/cv.md roles/role-1/cv-build --kind cv
+python3 -m toolkit --workspace "<workspace>" build-pdf roles/role-1/cv.md roles/role-1/cv-build --kind cv
 ```
 
 Add `--paper letter` for US Letter (default A4; the receipt records it). `check-cv <file>` checks the format without building. Other helpers: `extract-text <file>` prints the text of a supplied `.docx`, `.pdf`, `.txt` or `.md`; `lint` checks the hand-maintained workspace files (rubric weights total 100, every experience file has an INDEX row and a dated provenance line, the master CV parses, and each `screen.json` has the contract's fields).

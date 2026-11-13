@@ -5,7 +5,17 @@ description: Entry point and coordinator for the job search toolkit. Use for any
 
 # Job search
 
-The toolkit root is two levels above this skill's folder (it contains `toolkit/`). The candidate's workspace is `~/Documents/Job Search` unless they said otherwise. The candidate may not be technical: you run the commands, read and write the files, and explain in plain language.
+The toolkit root is two levels above this skill's folder (it contains `toolkit/`). The candidate's workspace is `~/Documents/Job Search` unless they said otherwise. The candidate may not be technical; the core rules below always apply.
+
+## Core rules
+
+These apply in every skill of this toolkit, whether or not the skill repeats them.
+
+- **You do the technical work.** Run every command, read and write every file, and explain in plain language. Never ask the candidate to run Python, edit JSON or compute hashes. The one exception is a step that needs their computer password (installing software): explain why, and let them do that step.
+- **Never invent.** No experience, numbers, dates or answers the candidate didn't give or confirm. Ask, then record what they confirm, with a date, in the right experience file ([the learning loop](../../docs/LEARNING-LOOP.md)).
+- **Their data stays private.** It lives in their workspace (default `~/Documents/Job Search`), never in the toolkit folder or a Git repository. Don't send it to job boards, CV checkers or anyone else unless they ask.
+- **Nothing goes to an employer without permission** for that exact action ([the application guide](../../docs/APPLY.md)).
+- **Commands:** each shell command may start in a different folder, so run `cd "<toolkit root>" && python3 -m toolkit --workspace "<workspace>" <command>`. After writing workspace files by hand, run `lint` and fix what it reports.
 
 ## Route the request
 

@@ -75,7 +75,8 @@ def main(argv=None):
                 hints.append("Most reliable fix on Linux, containers and WSL: 'npx @puppeteer/browsers install "
                              "chrome-headless-shell@stable', then set JOBKIT_CHROME to the chrome-headless-shell "
                              "path it prints, and run doctor again.")
-            result = {"python": sys.version.split()[0], "workspace": str(root),
+            result = {"python": sys.version.split()[0], "python_ok": sys.version_info >= (3, 9),
+                      "workspace": str(root),
                       "pdf_dependencies": {name: bool(path) for name, path in runtime.items()},
                       "pdf_export_test": check,
                       "pdf_ready": check == "ok",
@@ -104,6 +105,8 @@ def main(argv=None):
             return 0
         elif c == "check-cv":
             result = pdf.check_source(root, args.source)
+            result["warnings"] = lint.cv_warnings(core.inside(root, args.source).read_text(encoding="utf-8"),
+                                                  args.source)
         elif c == "check":
             package = quality.gate(root, args.package, args.review, final=args.final)
             result = {"review_gate": "pass", "role_id": package["role_id"],

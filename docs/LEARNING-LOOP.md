@@ -35,7 +35,7 @@ Example: `- 2030-01-15 | screening northwind-vp-product-r123 | confirmed by cand
 ## Rules
 
 - **Two or three questions per job, not twenty.** The loop should feel like a good recruiter's conversation, not a form.
-- **Unconfirmed is not evidence.** Your guesses, typical figures for similar roles, or "probably" answers stay out of the CV. If they don't know a number, record a qualitative outcome instead.
+- **Unconfirmed is not evidence** for anything new. Lines from the candidate's own CV may stay as written in their role section; promoting or changing them needs confirmation ("Which claims a CV may use" in the CV craft guide). Your guesses, typical figures for similar roles, or "probably" answers stay out of the CV. If they don't know a number, record a qualitative outcome instead.
 - **Keep "I" and "we" separate.** Ask what they personally owned whenever an outcome was a team effort.
 - **Respect confidentiality.** Ask whether a number or client name can be used publicly, and record the answer under "Approved public wording".
 - **Never overwrite a confirmed fact.** If new information conflicts with it, keep both, flag the conflict, and ask.

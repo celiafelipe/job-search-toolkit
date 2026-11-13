@@ -20,6 +20,8 @@ h3 { font-size: 11.5pt; }
 strong { font-weight: 700; color: #0f1c27; }
 p, ul { margin: .2em 0 .54em; orphans: 3; widows: 3; }
 p { break-inside: avoid; }
+h3 + p { break-after: avoid; }
+li:first-child { break-before: avoid; }
 ul { padding-left: 1.25em; }
 li { margin: .12em 0; break-inside: avoid; }
 """
@@ -36,8 +38,16 @@ def tools():
         browser = str(candidate) if candidate.is_file() else None
     if browser:
         browser = shutil.which(browser)
-    return {"browser": browser, **{name: shutil.which(name)
-            for name in ("pdfinfo", "pdftotext", "pdftoppm")}}
+    return {"browser": browser, **{name: find_tool(name) for name in ("pdfinfo", "pdftotext", "pdftoppm")}}
+
+
+HOMEBREW = ("/opt/homebrew/bin", "/usr/local/bin")
+
+
+def find_tool(name):
+    """A tool on PATH, or in Homebrew's folders (people often skip Homebrew's 'add to PATH' step)."""
+    return shutil.which(name) or next((str(Path(folder) / name) for folder in HOMEBREW
+                                      if (Path(folder) / name).is_file()), None)
 
 
 def install_hints(runtime):
@@ -50,8 +60,17 @@ def install_hints(runtime):
                      "'npx @puppeteer/browsers install chrome-headless-shell@stable', then set JOBKIT_CHROME "
                      "to the chrome-headless-shell file it reports.")
     if not all(runtime[name] for name in ("pdfinfo", "pdftotext", "pdftoppm")):
-        hints.append("Install Poppler: macOS 'brew install poppler'; Debian/Ubuntu "
-                     "'sudo apt-get install poppler-utils'; Fedora 'sudo dnf install poppler-utils'.")
+        import sys
+        if sys.platform == "darwin" and not find_tool("brew"):
+            hints.append("Poppler (free PDF tools) is installed with Homebrew, which this Mac does not have yet. "
+                         "Step 1: the candidate pastes the install command from brew.sh into the Terminal app and "
+                         "types their Mac password when asked (it needs admin rights, so they run this step "
+                         "themselves). Step 2: run 'brew install poppler' (the agent can do this once "
+                         "Homebrew exists). The toolkit finds Homebrew's tools even if the 'add to PATH' step "
+                         "was skipped.")
+        else:
+            hints.append("Install Poppler: macOS 'brew install poppler'; Debian/Ubuntu "
+                         "'sudo apt-get install poppler-utils'; Fedora 'sudo dnf install poppler-utils'.")
     return hints
 
 

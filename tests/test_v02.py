@@ -190,3 +190,40 @@ class FourthReport(unittest.TestCase):
     def test_letter_paper_survives_verification_html(self):
         source = "# Sam Doe\n"
         self.assertNotEqual(pdf.html(pdf.parse(source), "letter"), pdf.html(pdf.parse(source)))
+
+
+class MacReport(unittest.TestCase):
+    def test_cv_warnings(self):
+        from toolkit import lint
+        template = (Path(__file__).resolve().parents[1] / "templates" / "master-cv.md").read_text(encoding="utf-8")
+        self.assertTrue(any("placeholder" in w for w in lint.cv_warnings(template)))
+        text = "# Sam Doe\n\n" + "VP Product | " * 10 + "\n\nI spearheaded growth — fast.\n"
+        joined = " ".join(lint.cv_warnings(text))
+        for expected in ("will wrap", "em dashes", "first person", "spearheaded"):
+            self.assertIn(expected, joined)
+        self.assertEqual(lint.cv_warnings("# Sam Doe\n\nVP Product | Lisbon\n\n- **Grew** revenue 20%\n"), [])
+
+    def test_screen_score_must_match_criteria(self):
+        import json
+        from toolkit import lint
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp).resolve() / "ws"
+            core.init(root, demo=True)
+            role = root / "roles" / "r1"
+            role.mkdir()
+            rationale = {"criteria": [{"criterion": "Scope", "weight": 60, "score": 45},
+                                      {"criterion": "Domain", "weight": 40, "score": 40}],
+                         "role_evidence": [], "candidate_evidence": [], "user_override": None}
+            screen = {"role_id": "r1", "score": 90, "verdict": "pursue", "hard_gaps": [], "unknowns": [],
+                      "rationale": rationale}
+            (role / "screen.json").write_text(json.dumps(screen), encoding="utf-8")
+            self.assertIn("criteria total 85", " ".join(lint.run(root)["errors"]))
+            screen["score"] = 85
+            (role / "screen.json").write_text(json.dumps(screen), encoding="utf-8")
+            self.assertEqual(lint.run(root)["errors"], [])
+
+    def test_poppler_found_in_homebrew_folder(self):
+        from unittest import mock
+        with mock.patch("shutil.which", return_value=None), \
+                mock.patch.object(pdf, "HOMEBREW", (str(Path(__file__).resolve().parent),)):
+            self.assertTrue(pdf.find_tool("test_v02.py").endswith("test_v02.py"))

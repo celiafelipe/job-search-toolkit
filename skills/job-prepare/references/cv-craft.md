@@ -8,7 +8,7 @@ The candidate should be able to read the tailored CV five minutes before an inte
 
 ## Structure
 
-1. **Name and header line:** a headline, location and contact details.
+1. **Name, headline and header line:** the headline (level plus positioning) goes on its own line under the name; the header line below it holds only location, email, phone and one profile link.
 2. **Executive summary** (executive and senior tracks), or a short profile: three or four lines.
 3. **Key achievements** (executive track; optional for senior): three to five bolded, quantified results across their career.
 4. **Experience:** most recent first. For each role: a heading `Role | Organization | Start – End`, one line of context (what the organization is, and the scope: team, budget, products, markets), then the bullets.
@@ -42,14 +42,22 @@ Three to five results that together show range: pick from different roles and di
 ## Voice and details
 
 - **One voice throughout.** No "I", "me" or "my" anywhere, including the summary: "Builds engineering organizations that…" or a verbless phrase, not "I build teams…".
-- **Keep the header line short** so it fits on one line: location, email, phone and one profile link. Drop anything else, or put the link on a second line on purpose.
-- **Skills line by level.** For executive and senior candidates, list leadership and domain areas the bullets evidence (for example "Platform strategy, M&A integration, P&L ownership"). Leave detailed tools and languages out unless the role asks for them.
+- **Keep the header line short** so it fits on one line (under about 95 characters; `check-cv` warns): location, email, phone and one profile link. The headline has its own line above it.
+- **Skills line by level.** For executive and senior candidates, list leadership and domain areas the bullets evidence (for example "Platform strategy, M&A integration, P&L ownership"). Leave detailed tools and languages out unless the role asks for them. This is a master CV decision: fix it in `master-cv.md`, not per role.
+- **Promotions within one employer:** one entry for the employer with both titles in the heading, most recent first: `VP Product (2019 – 2021), Head of Product (2017 – 2018) | Ledgerline`. Never show the later title for the whole period.
+- **Dates:** `Mon YYYY – Mon YYYY` (or `YYYY – YYYY` consistently) in role headings; `YYYY-MM` in experience files and INDEX.
 
 ## Headline and location
 
 - A good headline is level plus positioning, not just a title: "VP Engineering | Payments and platform reliability", "Product Executive | Marketplaces, B2B SaaS, 0 to 1 and scale". The positioning comes from `career-story.md`.
 - Match the headline to the **level of the target role**. Never claim more than the candidate holds; a broader framing is fine if the experience supports it. For example, someone who has been a Chief X Officer can present as "X Executive" or "X Leader" for a VP or Head-of role. Someone who has never held a C-level title must not present as one.
 - On a targeted application, show one base location plus a relocation or remote signal relevant to the job. Never imply they live somewhere they don't.
+
+## Which claims a CV may use
+
+- **Role sections** may keep lines imported from the candidate's own CV as they wrote them, even before the career interview confirms them: it is their own claim.
+- **Promote or change only confirmed claims.** Anything moved into the summary or key achievements, reworded to sound bigger, given a new or more precise number, or used as the main match for a job's must-have needs a confirmed provenance line. If it isn't confirmed, ask (the learning loop) or keep the original wording in its role.
+- When you compress, keep the hedges: "about six weeks" stays "about", and "shared with sales" stays shared.
 
 ## Tailoring a CV for a role
 
@@ -65,7 +73,7 @@ Three to five results that together show range: pick from different roles and di
 
 ## Keeping the master current
 
-The master CV improves as the experience files grow. After a career interview, or when the learning loop adds a strong new proof point, propose specific changes to `master-cv.md`: what to add, replace or reorder, and why. Apply them only after the candidate approves. Before changing it, copy the current version to `sources/master-cv-YYYY-MM-DD.md` so nothing is lost. Never edit the candidate's original files in `sources/`.
+The master CV improves as the experience files grow. After a career interview, or when the learning loop adds a strong new proof point, propose specific changes to `master-cv.md`: what to add, replace or reorder, and why. Apply them only after the candidate approves. Before changing it, copy the current version to `history/master-cv-YYYY-MM-DD.md` (create the folder if needed) so nothing is lost. Keep these copies out of `sources/`, which holds only the candidate's originals; never edit those.
 
 ## Anti-patterns (instant discard signals)
 
