@@ -8,6 +8,10 @@ from toolkit import core, pdf
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 import privacy_check  # noqa: E402
 
+if pdf.export_check() != "ok":
+    print("\n" + "!" * 70 + "\nPDF EXPORT IS BROKEN HERE: the real-PDF tests will be SKIPPED.\n"
+          + pdf.export_check() + "\nRun 'python3 -m toolkit doctor' for the fix.\n" + "!" * 70, file=sys.stderr)
+
 
 class PrivacyCheck(unittest.TestCase):
     def test_detects_secrets_and_personal_paths(self):
@@ -143,3 +147,46 @@ class ThirdReport(unittest.TestCase):
         blocks = pdf.parse("# Sam Doe\n")
         self.assertIn("size: letter", pdf.html(blocks, "letter"))
         self.assertIn("size: A4", pdf.html(blocks))
+
+
+class FourthReport(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name).resolve() / "ws"
+        core.init(self.root, demo=True)
+
+    def tearDown(self):
+        self.temp.cleanup()
+
+    def test_docx_text_extraction(self):
+        import zipfile
+        ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+        xml = (f'<w:document xmlns:w="{ns}"><w:body><w:p><w:r><w:t>Sam Doe</w:t></w:r></w:p>'
+               '<w:p><w:r><w:t>VP </w:t></w:r><w:r><w:t>Product</w:t></w:r></w:p></w:body></w:document>')
+        with zipfile.ZipFile(self.root / "sources" / "cv.docx", "w") as archive:
+            archive.writestr("word/document.xml", xml)
+        self.assertEqual(pdf.extract_text(self.root, "sources/cv.docx"), "Sam Doe\nVP Product\n")
+
+    def test_lint_on_fresh_workspace_is_clean(self):
+        from toolkit import lint
+        self.assertEqual(lint.run(self.root)["errors"], [])
+
+    def test_lint_finds_problems(self):
+        import json
+        from toolkit import lint
+        (self.root / "rubric.md").write_text(
+            "| Criterion | Weight | Evidence |\n| --- | --- | --- |\n"
+            "| Scope | 60 | x |\n| Domain | 30% | y |\n", encoding="utf-8")
+        (self.root / "experience" / "2020-orgco.md").write_text("# VP | Orgco | 2020\n\n## Provenance log\n",
+                                                                 encoding="utf-8")
+        role = self.root / "roles" / "r1"
+        role.mkdir()
+        (role / "screen.json").write_text(json.dumps({"role_id": "r2", "verdict": "maybe"}), encoding="utf-8")
+        errors = " ".join(lint.run(self.root)["errors"])
+        for expected in ("total 90", "no row in experience/INDEX.md", "no dated line", "missing",
+                         "pursue, hold or skip", "does not match its folder"):
+            self.assertIn(expected, errors)
+
+    def test_letter_paper_survives_verification_html(self):
+        source = "# Sam Doe\n"
+        self.assertNotEqual(pdf.html(pdf.parse(source), "letter"), pdf.html(pdf.parse(source)))

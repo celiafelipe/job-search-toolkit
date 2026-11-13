@@ -19,7 +19,7 @@ One entry per accomplishment. Keep "I" separate from "we". Numbers need a baseli
 - What happened and why it mattered:
 - Your personal contribution (vs the team's):
 - Outcome and how it was measured:
-- Evidence or source (CV, performance review, candidate confirmed on YYYY-MM-DD):
+- Evidence or source (see the provenance log):
 - Approved public wording or confidentiality limits:
 
 ## Low points and lessons
@@ -39,4 +39,7 @@ Short stories ready for interviews: situation, what you did, result, what it sho
 
 ## Provenance log
 
-Dated notes on where each fact came from, e.g. `2030-01-15 — candidate confirmed team size during screening of <role>`.
+One line per source, in the format described in the toolkit's learning loop guide:
+`- YYYY-MM-DD | <source> | <unconfirmed / confirmed by candidate / corrected by candidate> | <what it covers>`
+
+- 

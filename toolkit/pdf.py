@@ -234,6 +234,30 @@ def page_count(pdf, runtime):
     return int(match[1])
 
 
+def extract_text(root, source):
+    """Plain text from a CV the candidate supplied (.docx, .pdf, .txt or .md), using only local tools."""
+    import zipfile
+    from xml.etree import ElementTree
+    path = inside(root, source)
+    suffix = path.suffix.lower()
+    if suffix == ".docx":
+        ns = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+        with zipfile.ZipFile(path) as archive:
+            tree = ElementTree.fromstring(archive.read("word/document.xml"))
+        lines = []
+        for para in tree.iter(ns + "p"):
+            text = "".join(node.text or "" for node in para.iter() if node.tag in (ns + "t", ns + "tab"))
+            lines.append(text)
+        return "\n".join(lines).strip() + "\n"
+    if suffix == ".pdf":
+        tool = shutil.which("pdftotext")
+        require(tool, "Reading a PDF needs Poppler; run doctor for the install command")
+        return run([tool, "-layout", str(path), "-"])
+    require(suffix in (".txt", ".md", ".text"),
+            "Supported: .docx, .pdf, .txt, .md. For .doc or .pages, ask the candidate to save as .docx or PDF")
+    return path.read_text(encoding="utf-8", errors="replace")
+
+
 def check_source(root, source):
     """Validate a CV or letter against the supported Markdown subset without building a PDF."""
     blocks = parse(inside(root, source).read_text(encoding="utf-8"))
@@ -274,7 +298,7 @@ def build(root, source, output, kind, paper="a4"):
         require(record(source) == source_before, "Source changed during build")
         files = {f.name: {"path": str(output / f.name), "sha256": record(f)["sha256"]}
                  for f in target.iterdir() if f.is_file()}
-        receipt = {"schema": 1, "kind": kind, "source": source_before,
+        receipt = {"schema": 1, "kind": kind, "paper": paper, "source": source_before,
                    "builder_sha256": record(Path(__file__))["sha256"],
                    "pages": [p.name for p in images], "files": files,
                    "recovery_warnings": warnings, "word_count": sum(len(v.split())
@@ -293,7 +317,8 @@ def verify(root, build_path, attachment, kind):
     source = checked(root, receipt["source"])
     files = {name: checked(root, item) for name, item in receipt["files"].items()}
     require(files["document.html"].read_text(encoding="utf-8") ==
-            html(parse(source.read_text(encoding="utf-8"))), "Build HTML differs from current source")
+            html(parse(source.read_text(encoding="utf-8")), receipt.get("paper", "a4")),
+            "Build HTML differs from current source")
     require(record(attachment)["sha256"] == receipt["files"]["document.pdf"]["sha256"],
             "Outgoing PDF differs from checked build")
     runtime = tools()

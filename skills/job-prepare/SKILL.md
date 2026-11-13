@@ -20,7 +20,7 @@ For an application that will go through the full reviewed workflow, work in a fr
 ## Steps
 
 1. **Map the evidence.** List the job's must-haves. For each, find the strongest supported evidence across all roles, including older ones, and rate it direct, adjacent, unsupported or candidate-suggested. Save this as `roles/<role-id>/evidence-map.md`.
-2. **Close the important gaps first.** If a must-have only has thin evidence, run [the learning loop](../../docs/LEARNING-LOOP.md) before writing: share what's strong, ask two or three questions, and record what they confirm. Don't write around a gap you could ask about.
+2. **Close the important gaps first.** If a must-have only has thin evidence, run [the learning loop](../../docs/LEARNING-LOOP.md) before writing: share what's strong, ask two or three questions, and record what they confirm. Skip questions already asked for this job during screening. Don't write around a gap you could ask about.
 3. **Tailor the CV.** Copy `master-cv.md` to `roles/<role-id>/cv.md` and apply the tailoring steps and limits in the CV craft guide. Keep their voice, and never edit the master or `sources/`.
 4. **Show the changes.** Give a short summary of what changed and why, the strongest three matches, and two or three interview talking points. Ask for their reaction, and revise until they're happy. They must recognize every line.
 5. **Cover letter, only if required:** three short paragraphs with two or three specific, evidenced connections to the employer's needs. No generic motivation, and no repeating the CV. Match the required format and length.
@@ -31,7 +31,7 @@ For an application that will go through the full reviewed workflow, work in a fr
    python3 -m toolkit --workspace "<workspace>" build-pdf roles/<role-id>/cv.md roles/<role-id>/cv-build --kind cv
    ```
 
-   Run `check-cv roles/<role-id>/cv.md` first if you want to catch format problems quickly. For US Letter paper (common in the US and Canada), add `--paper letter`. Use a new output folder for each build (`cv-build`, `cv-build-2`, …). Open `page-*.png` yourself and check the layout, page breaks, lone lines at the top of a page and clipping; reword to fix. If the build reports text it could not read back, it names the passages: simplify or reword them. Then copy `cv-build/document.pdf` to an upload-ready name such as `roles/<role-id>/Firstname-Lastname-CV-Employer.pdf` and tell the candidate where it is. (If that copy goes into a reviewed package, reference the copy's path and hash.) If PDF export fails, run `doctor` and follow its `fix` hints.
+   Run `check-cv roles/<role-id>/cv.md` first if you want to catch format problems quickly. For US Letter paper (common in the US and Canada), add `--paper letter`. Use a new output folder for each build (`cv-build`, `cv-build-2`, …). Open `page-*.png` yourself and check the layout, page breaks, lone lines at the top of a page and clipping; reword to fix. If you can't view images, use the page count in the build result and `layout.txt` in the build folder (where each page's text starts and ends), and tell the candidate to glance at the PDF themselves. If the build reports text it could not read back, it names the passages: simplify or reword them. Then copy `cv-build/document.pdf` to an upload-ready name such as `roles/<role-id>/Firstname-Lastname-CV-Employer.pdf` and tell the candidate where it is. (If that copy goes into a reviewed package, reference the copy's path and hash.) If PDF export fails, run `doctor` and follow its `fix` hints.
 
 ## Hand off
 

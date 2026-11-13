@@ -6,7 +6,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-from . import core, pdf, quality
+from . import core, lint, pdf, quality
 
 
 def parser():
@@ -31,6 +31,9 @@ def parser():
     build.add_argument("output")
     build.add_argument("--kind", choices=("cv", "letter"), required=True)
     build.add_argument("--paper", choices=("a4", "letter"), default="a4", help="Page size (default a4)")
+    commands.add_parser("lint", help="Check the workspace files the agent maintains (rubric, INDEX, provenance, screenings)")
+    commands.add_parser("extract-text", help="Print the text of a CV the candidate supplied (.docx, .pdf, .txt, .md)"
+                        ).add_argument("source")
     commands.add_parser("check-cv", help="Check a CV or letter uses the supported format, without building a PDF"
                         ).add_argument("source")
     check = commands.add_parser("check", help="Recompute the independent review gate")
@@ -67,7 +70,7 @@ def main(argv=None):
             runtime = pdf.tools()
             check = pdf.probe(runtime)
             hints = pdf.install_hints(runtime)
-            if all(runtime.values()) and check != "ok":
+            if all(runtime.values()) and check != "ok" and "chrome-headless-shell" not in check:
                 hints.append("The PDF tools are installed but a test export failed: " + check)
                 hints.append("Most reliable fix on Linux, containers and WSL: 'npx @puppeteer/browsers install "
                              "chrome-headless-shell@stable', then set JOBKIT_CHROME to the chrome-headless-shell "
@@ -80,7 +83,10 @@ def main(argv=None):
                       "fix": hints,
                       "scope": "No browser session, site access, or authenticated tool was checked."}
         elif c == "init":
-            result = core.init(root, args.demo)
+            core.init(root, args.demo)
+            result = {"workspace": str(root),
+                      "message": f"Created the private job search folder at {root}. Next: add the candidate's "
+                                 "CV or LinkedIn PDF to its sources folder."}
         elif c == "intake":
             result = core.intake(root, args.job, args.refresh)
         elif c == "tracker":
@@ -91,6 +97,11 @@ def main(argv=None):
             result = core.recover_lock(root, args.owner, args.evidence)
         elif c == "build-pdf":
             result = pdf.build(root, args.source, args.output, args.kind, args.paper)
+        elif c == "lint":
+            result = lint.run(root)
+        elif c == "extract-text":
+            print(pdf.extract_text(root, args.source), end="")
+            return 0
         elif c == "check-cv":
             result = pdf.check_source(root, args.source)
         elif c == "check":
@@ -107,6 +118,8 @@ def main(argv=None):
             result = core.resolve(root, args.role_id, args.attempt_id, args.outcome,
                                   args.evidence, args.owner)
         print(json.dumps(result, indent=2, ensure_ascii=False))
+        if c == "lint":
+            return 0 if not result["errors"] else 1
         return 0 if c != "doctor" or result["pdf_ready"] else 1
     except (OSError, ValueError, KeyError, TypeError, AttributeError, subprocess.TimeoutExpired) as exc:
         print(f"Stopped: {exc}", file=sys.stderr)

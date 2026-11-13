@@ -28,7 +28,7 @@ Supported format: `#` to `###` headings, plain paragraphs, `- ` lists and `**bol
 
 ## Key achievements
 
-Three to five results that together show range: pick from different roles and different strengths (for example growth, scale, people, transformation). Phrase each as a career-level headline, not a copy of a role bullet: if an achievement also appears under its role, the role bullet gives the how and the detail, and the key achievement gives the one-line result. No two lines on the page should read almost the same.
+Three to five results that together show range: pick from different roles and different strengths (for example growth, scale, people, transformation). Phrase each as a career-level headline, not a copy of a role bullet: if an achievement also appears under its role, the role bullet gives the how and the detail, and the key achievement gives the one-line result. No two lines on the page should read almost the same, and the same number should not appear twice: once a result is a key achievement, its role entry either drops that bullet or describes a different part of the work (the how, or another result from that role).
 
 ## Writing bullets
 
@@ -47,6 +47,7 @@ Three to five results that together show range: pick from different roles and di
 
 ## Headline and location
 
+- A good headline is level plus positioning, not just a title: "VP Engineering | Payments and platform reliability", "Product Executive | Marketplaces, B2B SaaS, 0 to 1 and scale". The positioning comes from `career-story.md`.
 - Match the headline to the **level of the target role**. Never claim more than the candidate holds; a broader framing is fine if the experience supports it. For example, someone who has been a Chief X Officer can present as "X Executive" or "X Leader" for a VP or Head-of role. Someone who has never held a C-level title must not present as one.
 - On a targeted application, show one base location plus a relocation or remote signal relevant to the job. Never imply they live somewhere they don't.
 
@@ -69,7 +70,7 @@ The master CV improves as the experience files grow. After a career interview, o
 ## Anti-patterns (instant discard signals)
 
 - **A summary that echoes the job description.** Screeners spot JD-parroting immediately. Keep the candidate's voice; you may adjust one phrase or add one natural sentence that connects to the company.
-- **Self-labelling adjectives** ("data-driven", "visionary", "results-oriented"). Let the bullets prove it.
+- **Self-labelling adjectives** ("data-driven", "visionary", "results-oriented"). Let the bullets prove it. If a phrase like this is the candidate's own wording, point it out once and suggest a version the bullets prove; keep it only if they still want it.
 - **Em dashes and other AI writing tells**: "spearheaded", "leveraged synergies", "in today's fast-paced world". Use commas, colons or parentheses instead of em dashes.
 - **Keyword stuffing** or a long skills list of things that aren't evidenced elsewhere.
 - **Invented or rounded-up metrics.**

@@ -19,7 +19,7 @@ If the rubric is missing, give a provisional qualitative view and offer to set u
 - Check level and scope against their track and preferences: team size, reporting line, company stage, remit.
 - Distinguish a genuine incompatibility from missing information.
 - Rate the evidence for each must-have as direct, adjacent, unsupported or unknown, citing experience files. Don't reward title overlap alone.
-- Apply the candidate's weights and thresholds consistently. If they want to pursue a role anyway, note the override and keep the objective score.
+- Check the hard gates first. Then score each criterion with the scale in `rubric.md` (Full, Most, Half, Little, None) and add up. Apply the candidate's weights and thresholds consistently. If they want to pursue a role anyway, note the override and keep the objective score.
 
 ## Respond (short and scannable)
 

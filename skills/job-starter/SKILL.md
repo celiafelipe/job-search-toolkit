@@ -19,7 +19,7 @@ Tell them the setup gets them started quickly, and that their career file improv
 
 ## 1. Check the computer (you do this, silently if all is well)
 
-The toolkit root is the folder containing `toolkit/` and `skills/`, two levels above this skill's folder. Run commands from there:
+The toolkit root is the folder containing `toolkit/` and `skills/`, two levels above this skill's folder (when installed as a plugin, that is inside the plugin's install folder). Each shell command may start in a different folder, so always run commands as `cd "<toolkit root>" && python3 -m toolkit ...`:
 
 ```sh
 python3 -m toolkit doctor
@@ -48,15 +48,15 @@ Ask for whatever is easiest, in this order of preference. Any one of these is en
 2. **Their LinkedIn profile as a PDF.** On LinkedIn: open your profile → **Resources** (or **More**) → **Save to PDF**. Do not try to log in to LinkedIn or scrape it. A public profile link is fine to read if your tools can open it, but the PDF is more reliable.
 3. **Anything richer they already have:** past performance reviews, promotion cases, interview preparation notes (for example WHO or Topgrading prep), a bio or portfolio. Put them in `sources/` too.
 
-Read every source fully. If a file cannot be read, say so rather than guessing at its contents.
+Read every source fully. To get the text of a Word or PDF file, run `python3 -m toolkit --workspace "<workspace>" extract-text "sources/<file>"` (it handles `.docx`, `.pdf`, `.txt` and `.md`; ask them to re-save `.doc` or `.pages` files as `.docx` or PDF). If a file cannot be read, say so rather than guessing at its contents.
 
 ## 4. Build their career files
 
 From the sources, create:
 
-- **`experience/YYYY-organization.md`**, one per role, from `experience/_role-template.md`. Fill only what the sources state. Note the source in each file's provenance log, e.g. `from CV (sources/cv.pdf), not yet confirmed`.
+- **`experience/YYYY-organization.md`**, one per role, from `experience/_role-template.md`. Fill only what the sources state. Add a provenance line such as `- 2030-01-15 | CV import (sources/cv.docx) | unconfirmed | all roles and bullets` (format in [the learning loop](../../docs/LEARNING-LOOP.md#provenance-lines)).
 - **`experience/INDEX.md`**: one row per role with a depth rating. Most roles start as `thin`.
-- **`master-cv.md`** in the supported format (headings, paragraphs, dash lists, `**bold**`), following [the CV craft guide](../job-prepare/references/cv-craft.md). Keep their content and wording faithfully: this is their master copy, not a tailored version. Formatting is not content, so do adapt it: use the section headings for their career track (their "Profile" becomes "Executive summary" for an executive, for example), and replace em dashes with commas, colons or parentheses. For the executive track, add an executive summary and key achievements built only from what the sources state, and mark them for their review. Then run `python3 -m toolkit --workspace "<workspace>" check-cv master-cv.md` to confirm the format is supported. Never edit their original file in `sources/`.
+- **`master-cv.md`** in the supported format (headings, paragraphs, dash lists, `**bold**`), following [the CV craft guide](../job-prepare/references/cv-craft.md). Keep their content and wording faithfully: this is their master copy, not a tailored version. Formatting is not content, so do adapt it: use the section headings for their career track (their "Profile" becomes "Executive summary" for an executive, for example), and replace em dashes with commas, colons or parentheses. For the executive track, add an executive summary and key achievements built only from what the sources state. The CV itself can't hold review notes (anything you add would end up in the PDF), so list every line you drafted rather than transcribed under a "Master CV: to review" heading in `open-questions.md`, and walk them through it in step 4's summary. Then run `python3 -m toolkit --workspace "<workspace>" check-cv master-cv.md` to confirm the format is supported. Never edit their original file in `sources/`.
 - **`profile.md`**: name, contact details, languages, and the career track (`executive`, `senior` or `standard`), inferred from titles and scope and then confirmed with them.
 - **`career-story.md`**: a short draft of their positioning and career arc, clearly marked as a draft for them to react to.
 
@@ -72,11 +72,11 @@ Ask one or two at a time, conversationally. Do not present the template.
 4. What kind of company excites you (stage, size, industry, mission)?
 5. Do you want to set a compensation floor? (Optional. Keep it private and never put it in an application without asking.)
 
-Write `search-preferences.md`. Draft `rubric.md` with weights totalling 100 and pursue/hold/skip thresholds, show it to them in plain words ("I'd score a role mostly on X and Y; a role in Z would be a hard no"), and adjust it until they agree. The rubric is theirs, not yours.
+Write `search-preferences.md`. Draft `rubric.md` from its template: hard gates (no weight), weighted criteria totalling 100, the scoring scale, and pursue/hold/skip thresholds, show it to them in plain words ("I'd score a role mostly on X and Y; a role in Z would be a hard no"), and adjust it until they agree. The rubric is theirs, not yours.
 
 ## 6. Show what's strong and what's thin
 
-Give a short health check:
+First run `python3 -m toolkit --workspace "<workspace>" lint` and fix anything it reports (rubric weights, INDEX rows, provenance lines). Then give a short health check:
 
 - Two or three things that already stand out in their background.
 - Which roles are `thin` and why that matters, e.g. "your most recent role has no numbers yet, and that's the one recruiters read first".

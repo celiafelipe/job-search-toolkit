@@ -56,6 +56,8 @@ Build only PDFs the form accepts. Use UTF-8 plain Markdown: headings with one to
 python3 -m toolkit build-pdf roles/role-1/cv.md roles/role-1/cv-build --kind cv
 ```
 
+Add `--paper letter` for US Letter (default A4; the receipt records it). `check-cv <file>` checks the format without building. Other helpers: `extract-text <file>` prints the text of a supplied `.docx`, `.pdf`, `.txt` or `.md`; `lint` checks the hand-maintained workspace files (rubric weights total 100, every experience file has an INDEX row and a dated provenance line, the master CV parses, and each `screen.json` has the contract's fields).
+
 The output contains the exact PDF, generated HTML, two recoverability views, every-page PNGs and `build.json`. Never handwrite the build receipt. Both text modes must recover each source passage; check order warnings, repeated text, chronology and attribution manually. An identical upload-named PDF may reuse the build if the new path and hash are included in the reviewed package.
 
 Prepare `package.json` with:
