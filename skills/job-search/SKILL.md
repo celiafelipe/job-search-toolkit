@@ -24,6 +24,7 @@ These apply in every skill of this toolkit, whether or not the skill repeats the
 | No workspace yet, or "get started" | [job-starter](../job-starter/SKILL.md) |
 | Wants to strengthen their profile, or the experience files are thin | [career-interview](../career-interview/SKILL.md) |
 | Wants new roles found or a list of links checked | [job-discover](../job-discover/SKILL.md) |
+| Wants discovery to run every day, or a scheduled "daily run" | [job-autopilot](../job-autopilot/SKILL.md) |
 | Shares a job and asks if it fits | [job-screen](../job-screen/SKILL.md) |
 | Wants a tailored CV, cover letter or answers | [job-prepare](../job-prepare/SKILL.md) |
 | A package needs checking before sending | [job-review](../job-review/SKILL.md), in a fresh separate context |

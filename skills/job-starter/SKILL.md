@@ -89,6 +89,8 @@ Offer two paths and let them choose:
 - **Career interview (recommended, about 20 minutes per role):** start with their most recent role. See [career-interview](../career-interview/SKILL.md). This is the fastest way to a strong CV.
 - **Jump into a real job:** paste a job ad or link, and you will screen it ([job-screen](../job-screen/SKILL.md)). You will tell them what's strong for that role and ask about the gaps that matter, so their career file grows with every job ([learning loop](../../docs/LEARNING-LOOP.md)).
 
+Mention in one line that once they've approved some job sources and tried a search together, you can run it every morning for them ([job-autopilot](../job-autopilot/SKILL.md)). Don't set up a schedule now.
+
 ## Rules
 
 - The core rules in [job-search](../job-search/SKILL.md#core-rules) apply here too.
