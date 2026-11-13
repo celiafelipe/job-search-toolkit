@@ -17,6 +17,7 @@ h1, h2, h3 { margin: .65em 0 .22em; break-after: avoid; }
 h1 { font-size: 24pt; margin-top: 0; }
 h2 { font-size: 14pt; border-bottom: 1px solid #aab9c1; color: #203b4a; }
 h3 { font-size: 11.5pt; }
+strong { font-weight: 700; color: #0f1c27; }
 p, ul { margin: .2em 0 .54em; orphans: 2; widows: 2; }
 ul { padding-left: 1.25em; }
 li { margin: .12em 0; break-inside: avoid; }
@@ -37,6 +38,18 @@ def tools():
             for name in ("pdfinfo", "pdftotext", "pdftoppm")}}
 
 
+def install_hints(runtime):
+    """Plain-language fixes an agent can offer (with the user's permission) for missing tools."""
+    hints = []
+    if not runtime["browser"]:
+        hints.append("Install Google Chrome (google.com/chrome) or Chromium, "
+                     "or set JOBKIT_CHROME to the browser executable.")
+    if not all(runtime[name] for name in ("pdfinfo", "pdftotext", "pdftoppm")):
+        hints.append("Install Poppler: macOS 'brew install poppler'; Debian/Ubuntu "
+                     "'sudo apt-get install poppler-utils'; Fedora 'sudo dnf install poppler-utils'.")
+    return hints
+
+
 def run(command):
     result = subprocess.run(command, check=False, capture_output=True, timeout=90)
     require(result.returncode == 0, f"{Path(command[0]).name} failed (exit {result.returncode})")
@@ -44,7 +57,7 @@ def run(command):
 
 
 def parse(markdown):
-    """Constrained syntax: headings 1–3, paragraphs, and contiguous dash lists."""
+    """Constrained syntax: headings 1–3, paragraphs, contiguous dash lists and **bold**."""
     blocks, paragraph, bullets = [], [], []
     for line in [*markdown.splitlines(), ""]:
         line = line.strip()
@@ -68,15 +81,28 @@ def parse(markdown):
                     "Unsupported Markdown; use headings, paragraphs and dash lists")
             paragraph.append(line)
     require(blocks, "Source is empty")
-    require(all(not re.search(r"\*\*|__|`|\]\(", v) for _, values in blocks for v in values),
-            "Use literal text rather than inline Markdown or links")
+    for _, values in blocks:
+        for v in values:
+            require(v.count("**") % 2 == 0, "Close every **bold** span")
+            require(not re.search(r"__|`|\]\(", plain(v)) and "*" not in plain(v),
+                    "Use literal text; only **bold** inline emphasis is supported")
     return blocks
+
+
+def plain(value):
+    """Text as it reads in the PDF: bold markers removed."""
+    return value.replace("**", "")
+
+
+def inline(value):
+    """Escape text and render balanced **bold** spans."""
+    return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", escape(value))
 
 
 def html(blocks):
     chunks = []
     for tag, values in blocks:
-        body = "".join(f"<li>{escape(v)}</li>" for v in values) if tag == "ul" else escape(values[0])
+        body = "".join(f"<li>{inline(v)}</li>" for v in values) if tag == "ul" else inline(values[0])
         chunks.append(f"<{tag}>{body}</{tag}>")
     return '<!doctype html><meta charset="utf-8"><style>' + CSS + '</style>' + '\n'.join(chunks)
 
@@ -87,7 +113,7 @@ def normalized(value):
 
 
 def analyze(blocks, extracted):
-    passages = [normalized(p) for _, values in blocks for p in values]
+    passages = [normalized(plain(p)) for _, values in blocks for p in values]
     errors, warnings = [], []
     for mode, contents in extracted.items():
         contents = normalized(contents)

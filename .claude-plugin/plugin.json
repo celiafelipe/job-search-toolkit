@@ -1,0 +1,10 @@
+{
+  "name": "job-search-toolkit",
+  "description": "An AI job-search partner for senior leaders. It builds your career evidence once, from your CV, LinkedIn export and a guided career interview, then screens roles, tailors truthful CVs, and tracks applications. It never applies without your explicit permission.",
+  "version": "0.2.0",
+  "author": {
+    "name": "Job Search Toolkit contributors"
+  },
+  "license": "MIT",
+  "keywords": ["job-search", "career", "cv", "resume", "executive", "interview", "applications"]
+}

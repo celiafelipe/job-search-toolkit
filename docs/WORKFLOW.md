@@ -1,6 +1,6 @@
 # Local contracts
 
-The toolkit root is the checkout containing `toolkit/` and `skills/`. Run `python3 -m toolkit` there. The private workspace is the root chosen during onboarding, outside any Git checkout. Agent skills use `config.json` as a file pointer map; the CLI uses the selected workspace and its fixed `ledger.json` and `policy.json`. A manifest path can be absolute or relative to the workspace; all paths must resolve inside it. Path/hash references use the object below, with absolute resolved paths recommended. Changing workspaces or moving a package needs a new review.
+These are the technical contracts the agent follows; candidates never need to read them. The toolkit root is the checkout or plugin folder containing `toolkit/` and `skills/`. Run `python3 -m toolkit` there. The private workspace (default `~/Documents/Job Search`) is chosen during [job-starter](../skills/job-starter/SKILL.md), outside any Git checkout. Career evidence lives in `experience/` (one file per role) and grows through the [learning loop](LEARNING-LOOP.md). Agent skills use `config.json` as a file pointer map; the CLI uses the selected workspace and its fixed `ledger.json` and `policy.json`. A manifest path can be absolute or relative to the workspace; all paths must resolve inside it. Path/hash references use the object below, with absolute resolved paths recommended. Changing workspaces or moving a package needs a new review.
 
 ```json
 {"path": "/private/workspace/roles/role-1/answers.json", "sha256": "<SHA-256 of exact file bytes>"}
@@ -14,7 +14,7 @@ Use `shasum -a 256 FILE`, or `core.record(Path(...))` from this checkout, to get
 | --- | --- |
 | Discover | Supplied links or approved sources and `search-preferences.md` |
 | Screen | Job posting, `search-preferences.md`, `rubric.md` and relevant candidate evidence |
-| Prepare | Registered posting, screening, form inspection, `profile.md`, `master-cv.md`, detailed career evidence, and confirmed answers for actual questions |
+| Prepare | Registered posting, screening, form inspection, `profile.md`, `master-cv.md`, the relevant `experience/` files, and confirmed answers for actual questions |
 | Review | Raw posting, form inspection, approved sources, then exact prepared package |
 | Apply | Passing independent review, complete live recheck, action authority and a browser that supports the required interaction |
 | Track | Registered role and matching, verified receipt or an unresolved attempt to reconcile |
@@ -48,7 +48,7 @@ Store `inspection.json` with canonical `role_id`, exact HTTPS `destination_url`,
 
 Save `answers.json` with `role_id` and `fields`, a list of `{"prompt": "Exact prompt", "value": "Exact proposed value", "source": "Confirmed scoped evidence"}` objects. Supported values are strings, integers, booleans and lists of selected labels. Add `"kind": "letter"` to a required letter textbox answer. Record exact sent values, including consent decisions. Check employer constraints not represented by the CLI, such as allowed choices, input validation, disclosure scopes and non-letter length limits.
 
-Build only PDFs the form accepts. Use UTF-8 plain Markdown: headings with one to three hash signs, plain paragraphs separated by blank lines, and dash lists. Use literal URLs and plain text; no HTML, tables, images or inline markup. Put role, employer and dates together on a subheading; natural page breaks, no fixed page count. Start a fresh output directory:
+Build only PDFs the form accepts. Use UTF-8 plain Markdown: headings with one to three hash signs, plain paragraphs separated by blank lines, and dash lists. Use literal URLs and plain text; `**bold**` is the only inline markup. No HTML, tables, images, italics or links. Put role, employer and dates together on a subheading; natural page breaks, no fixed page count. Start a fresh output directory:
 
 ```sh
 python3 -m toolkit build-pdf roles/role-1/cv.md roles/role-1/cv-build --kind cv

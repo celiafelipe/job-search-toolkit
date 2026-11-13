@@ -105,13 +105,19 @@ def transaction(root):
         atomic(root / "ledger.json", data)
 
 
+DEFAULT_WORKSPACE = "~/Documents/Job Search"
+
+
 def init(root, demo):
     import shutil
-    root.mkdir(mode=0o700)
+    root.mkdir(mode=0o700, parents=True)
     for template in (ROOT / "templates").iterdir():
         if template.is_file():
             shutil.copyfile(template, root / template.name)
-    (root / "roles").mkdir()
+        elif template.is_dir():
+            shutil.copytree(template, root / template.name)
+    for folder in ("roles", "sources"):
+        (root / folder).mkdir(exist_ok=True)
     atomic(root / "ledger.json", {"schema": 1, "demo": demo, "browser_owner": None, "roles": {}})
     return str(root)
 
