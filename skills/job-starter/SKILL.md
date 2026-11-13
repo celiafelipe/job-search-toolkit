@@ -56,7 +56,7 @@ From the sources, create:
 
 - **`experience/YYYY-organization.md`**, one per role, from `experience/_role-template.md`. Fill only what the sources state. Note the source in each file's provenance log, e.g. `from CV (sources/cv.pdf), not yet confirmed`.
 - **`experience/INDEX.md`**: one row per role with a depth rating. Most roles start as `thin`.
-- **`master-cv.md`** in the supported format (headings, paragraphs, dash lists, `**bold**`), following [the CV craft guide](../job-prepare/references/cv-craft.md). Transcribe faithfully: this is their master copy, not a tailored version. Never edit their original file in `sources/`.
+- **`master-cv.md`** in the supported format (headings, paragraphs, dash lists, `**bold**`), following [the CV craft guide](../job-prepare/references/cv-craft.md). Transcribe faithfully: this is their master copy, not a tailored version. Use the structure for their career track (for executive: an executive summary and key achievements built only from what the sources state, marked for their review). Never edit their original file in `sources/`.
 - **`profile.md`**: name, contact details, languages, and the career track (`executive`, `senior` or `standard`), inferred from titles and scope and then confirmed with them.
 - **`career-story.md`**: a short draft of their positioning and career arc, clearly marked as a draft for them to react to.
 

@@ -75,6 +75,7 @@ Everything stays on your computer. Your assistant's provider processes what you 
 - **macOS or Linux.** Windows is not supported yet (WSL may work).
 - Python 3.10 or newer, plus Google Chrome or Chromium and Poppler for PDF export. The setup checks these and offers to install anything missing.
 - The toolkit doesn't log in to job sites, solve CAPTCHAs or bypass any site's rules. When a site needs a login, it hands over to you.
+- PDF export runs Chrome headless with a fresh profile and networking blocked, so your CV never leaves your computer during the build. In Linux containers running as root, Chrome's sandbox is disabled for this local page only. If `doctor` reports that the test export fails, it prints the fix (often installing Chrome's lightweight headless build).
 - The PDF uses a clean single-column layout designed to be read correctly by applicant tracking systems. No tool can guarantee how a specific employer's system parses it.
 
 ## For developers

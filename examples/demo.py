@@ -150,4 +150,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except ValueError as exc:
+        print(f"Demo stopped: {exc}\nRun 'python3 -m toolkit doctor' and follow its 'fix' hints.", file=sys.stderr)
+        sys.exit(1)

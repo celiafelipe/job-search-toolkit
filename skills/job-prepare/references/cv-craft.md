@@ -26,6 +26,10 @@ Supported format: `#` to `###` headings, plain paragraphs, `- ` lists and `**bol
 | Emphasis | Strategy, scale, business outcomes, transformation, leadership of leaders, board and investor exposure | Ownership, team leadership, cross-functional delivery, measurable impact | Skills, delivery, results, growth |
 | Older roles (10+ years ago) | One line of context, 0–2 bullets, or grouped under "Earlier career" | Same | Keep if relevant |
 
+## Key achievements
+
+Three to five results that together show range: pick from different roles and different strengths (for example growth, scale, people, transformation). Phrase each as a career-level headline, not a copy of a role bullet: if an achievement also appears under its role, the role bullet gives the how and the detail, and the key achievement gives the one-line result. No two lines on the page should read almost the same.
+
 ## Writing bullets
 
 - **Lead with the outcome**, then how, then scope: "**Grew net revenue 35% in 18 months** by repositioning pricing for three customer segments; led a team of 12."
@@ -48,7 +52,13 @@ Supported format: `#` to `###` headings, plain paragraphs, `- ` lists and `**bol
 4. Adjust the context line of a role to surface the relevant scope (industry, stage, team size), if the experience file supports it.
 5. Swap in a better-matching accomplishment from the experience files if one exists and is confirmed.
 
-**Limit the changes.** Typically no more than 15–20% of the content changes, and the summary keeps most of the candidate's own wording. A CV that reads like a different person is a red flag in interviews.
+**Limit the changes.** Tailoring a role CV typically changes no more than 15–20% of the master's content, and the summary keeps most of the candidate's own wording. A CV that reads like a different person is a red flag in interviews.
+
+**Structural upgrades belong in the master, not the role CV.** If the master is missing something its career track needs (for example an executive summary or key achievements section), or is still at import quality, do not add it per role. Propose an update to `master-cv.md` first (see "Keeping the master current" below), get approval, then tailor from the improved master.
+
+## Keeping the master current
+
+The master CV improves as the experience files grow. After a career interview, or when the learning loop adds a strong new proof point, propose specific changes to `master-cv.md`: what to add, replace or reorder, and why. Apply them only after the candidate approves. Before changing it, copy the current version to `sources/master-cv-YYYY-MM-DD.md` so nothing is lost. Never edit the candidate's original files in `sources/`.
 
 ## Anti-patterns (instant discard signals)
 
@@ -63,7 +73,7 @@ Supported format: `#` to `###` headings, plain paragraphs, `- ` lists and `**bol
 - **Vague job description:** keep the changes minimal and tailor to the industry, stage and level only.
 - **The master CV already matches well:** say so, and offer three to five small tweaks or the master as-is.
 - **A must-have isn't evidenced:** run the [learning loop](../../../docs/LEARNING-LOOP.md) and ask about it. If it's still not there, options are adjacent experience framed honestly, addressing it in a cover letter, or skipping the role. Never fill the gap.
-- **The master CV is weak:** suggest improving the master first (with the career interview) rather than polishing a weak base per role.
+- **The master CV is weak or missing sections its track needs:** improve the master first (career interview, then a master update), rather than polishing a weak base per role.
 
 ## Before handing off
 

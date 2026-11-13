@@ -31,7 +31,7 @@ For an application that will go through the full reviewed workflow, work in a fr
    python3 -m toolkit --workspace "<workspace>" build-pdf roles/<role-id>/cv.md roles/<role-id>/cv-build --kind cv
    ```
 
-   Use a new output folder for each build. Open `page-*.png` yourself and check the layout, page breaks and that nothing is clipped. Tell the candidate where the PDF is (`cv-build/document.pdf`). If the PDF tools are missing, run `doctor` and offer the fix.
+   Use a new output folder for each build (`cv-build`, `cv-build-2`, …). Open `page-*.png` yourself and check the layout, page breaks, lone lines at the top of a page and clipping; reword to fix. If the build reports text it could not read back, it names the passages: simplify or reword them. Then copy `cv-build/document.pdf` to an upload-ready name such as `roles/<role-id>/Firstname-Lastname-CV-Employer.pdf` and tell the candidate where it is. (If that copy goes into a reviewed package, reference the copy's path and hash.) If PDF export fails, run `doctor` and follow its `fix` hints.
 
 ## Hand off
 

@@ -108,9 +108,28 @@ def transaction(root):
 DEFAULT_WORKSPACE = "~/Documents/Job Search"
 
 
+def default_workspace():
+    """~/Documents/Job Search, using the desktop's (possibly translated) Documents folder on Linux."""
+    import shutil
+    import subprocess
+    tool = shutil.which("xdg-user-dir")
+    if tool:
+        try:
+            found = subprocess.run([tool, "DOCUMENTS"], capture_output=True, text=True, timeout=5).stdout.strip()
+        except (OSError, subprocess.SubprocessError):
+            found = ""
+        if found and Path(found).is_dir() and Path(found) != Path.home():
+            return str(Path(found) / "Job Search")
+    return DEFAULT_WORKSPACE
+
+
 def init(root, demo):
     import shutil
-    root.mkdir(mode=0o700, parents=True)
+    require(not (root / "ledger.json").exists(),
+            f"A workspace already exists at {root}; nothing was changed. Use it as is.")
+    require(not root.exists() or not any(root.iterdir()),
+            f"{root} already contains files; choose an empty or new folder for the workspace")
+    root.mkdir(mode=0o700, parents=True, exist_ok=True)
     for template in (ROOT / "templates").iterdir():
         if template.is_file():
             shutil.copyfile(template, root / template.name)

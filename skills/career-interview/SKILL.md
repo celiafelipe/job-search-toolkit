@@ -36,6 +36,7 @@ The single most valuable thing for a strong application is detailed, confirmed c
 - Update `experience/INDEX.md`: depth (`ok` or `rich`), interview status, last updated.
 - Update `career-story.md` if the session revealed a strength, a pattern or a motivation.
 - Clear the answered items from `open-questions.md`.
+- Propose updates to `master-cv.md` that the new evidence supports (a stronger bullet, a better number, a key achievement), following "Keeping the master current" in [the CV craft guide](../job-prepare/references/cv-craft.md). Apply only what they approve.
 - Show a short summary of what you captured, mention the one or two strongest new proof points, and offer to continue with the next role now or another day.
 
 ## Rules

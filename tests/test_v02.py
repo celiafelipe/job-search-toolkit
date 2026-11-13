@@ -39,6 +39,64 @@ class Markdown(unittest.TestCase):
         self.assertTrue(pdf.parse(template.read_text(encoding="utf-8")))
 
 
+class BetaFindings(unittest.TestCase):
+    """Regressions for issues found by the first fresh-machine beta run."""
+
+    def test_hyphen_wrapped_at_line_end_is_recovered(self):
+        blocks = pdf.parse("- Introduced the on-call model and PCI-DSS controls\n")
+        for extracted in ("Introduced the on-\ncall model and PCI-\nDSS controls",
+                          "Introduced the oncall model and PCIDSS controls",
+                          "Introduced the on-call model and PCI-DSS controls"):
+            errors, _ = pdf.analyze(blocks, {"reading": extracted})
+            self.assertEqual(errors, [], extracted)
+
+    def test_errors_name_the_line(self):
+        cases = {"# Name\n\n1. First": "Line 3", "# Name\nText with [link](x)": "Line 2",
+                 "# Name\n\n- *italic*": "Line 3", "# Name\n- **open": "Line 2",
+                 "#### Too deep": "Line 1"}
+        for source, expected in cases.items():
+            with self.assertRaisesRegex(ValueError, expected, msg=source):
+                pdf.parse(source)
+
+    def test_pasted_bullet_styles_become_lists(self):
+        blocks = pdf.parse("# Name\n\u2022 Led platform\n* Hired 9 managers\n- **Cut cost 38%**\n")
+        self.assertEqual(blocks[1], ("ul", ["Led platform", "Hired 9 managers", "**Cut cost 38%**"]))
+
+    def test_bold_paragraph_is_not_a_bullet(self):
+        self.assertEqual(pdf.parse("**Strong opening** line")[0][0], "p")
+
+    def test_pdf_title_comes_from_name(self):
+        self.assertIn("<title>Jordan Example</title>", pdf.html(pdf.parse("# Jordan Example\n\nText")))
+
+    def test_second_init_explains_instead_of_errno(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = core.workspace(Path(temp) / "ws", initialized=False)
+            core.init(root, demo=False)
+            with self.assertRaisesRegex(ValueError, "already exists"):
+                core.init(root, demo=False)
+
+    def test_timeout_message_suggests_fix(self):
+        with self.assertRaisesRegex(ValueError, "JOBKIT_CHROME"):
+            pdf.run([sys.executable, "-c", "import time; time.sleep(5)"], timeout=0.5)
+
+    def test_failure_message_keeps_tool_error(self):
+        with self.assertRaisesRegex(ValueError, "boom"):
+            pdf.run([sys.executable, "-c", "import sys; sys.stderr.write('boom'); sys.exit(3)"])
+
+    @unittest.skipUnless(pdf.export_check() == "ok", "PDF export unavailable here: " + pdf.export_check())
+    def test_real_build_with_many_hyphenated_words(self):
+        words = ("on-call", "PCI-DSS", "cross-functional", "go-to-market", "end-to-end", "data-driven",
+                 "B2B-SaaS", "follow-the-sun", "zero-downtime", "self-service")
+        bullets = "\n".join(f"- {' '.join(words[i:] + words[:i])} programme number {i} for the team"
+                             for i in range(len(words)))
+        with tempfile.TemporaryDirectory() as temp:
+            root = core.workspace(Path(temp) / "ws", initialized=False)
+            core.init(root, demo=False)
+            (root / "cv.md").write_text("# Hyphen Test\n\n## Experience\n\n" + bullets + "\n", encoding="utf-8")
+            result = pdf.build(root, "cv.md", "build", "cv")
+            self.assertGreaterEqual(result["pages"], 1)
+
+
 class Workspace(unittest.TestCase):
     def test_init_creates_experience_sources_and_roles(self):
         with tempfile.TemporaryDirectory() as temp:
