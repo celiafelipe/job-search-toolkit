@@ -33,4 +33,4 @@ When they answer, record the confirmed facts in the experience files as the lear
 
 ## Record
 
-If the role is registered, save `roles/<role-id>/screen.json` following [the contract](../../docs/WORKFLOW.md#1-intake-and-screening): `role_id`, `score`, `verdict`, `hard_gaps`, `unknowns`, `rationale`. Reassess when the posting, rubric or their answers change. Screening never authorizes an application.
+If the role is registered, save `roles/<role-id>/screen.json` following [the contract](../../docs/WORKFLOW.md#1-intake-and-screening): `role_id`, `score`, `verdict`, `hard_gaps`, `unknowns`, `rationale` (an object; its keys are defined in the contract). Reassess when the posting, rubric or their answers change. Screening never authorizes an application.

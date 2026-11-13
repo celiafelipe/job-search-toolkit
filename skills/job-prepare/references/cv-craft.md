@@ -39,6 +39,12 @@ Three to five results that together show range: pick from different roles and di
 - One idea per bullet, and one or two lines at most.
 - Bold sparingly: the result in each key bullet, never whole sentences.
 
+## Voice and details
+
+- **One voice throughout.** No "I", "me" or "my" anywhere, including the summary: "Builds engineering organizations that…" or a verbless phrase, not "I build teams…".
+- **Keep the header line short** so it fits on one line: location, email, phone and one profile link. Drop anything else, or put the link on a second line on purpose.
+- **Skills line by level.** For executive and senior candidates, list leadership and domain areas the bullets evidence (for example "Platform strategy, M&A integration, P&L ownership"). Leave detailed tools and languages out unless the role asks for them.
+
 ## Headline and location
 
 - Match the headline to the **level of the target role**. Never claim more than the candidate holds; a broader framing is fine if the experience supports it. For example, someone who has been a Chief X Officer can present as "X Executive" or "X Leader" for a VP or Head-of role. Someone who has never held a C-level title must not present as one.

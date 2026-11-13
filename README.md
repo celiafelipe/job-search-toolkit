@@ -66,6 +66,10 @@ Documents/Job Search/
   rubric.md               how roles are scored (your criteria, your weights)
   sources/                drop your CV, LinkedIn PDF and other material here
   roles/                  one folder per job: screening, tailored CV, PDF
+  answer-policy.md        answers you approved for reuse on application forms
+  config.json, policy.json, ledger.json, job-snapshots/
+                          the assistant's bookkeeping: settings, application permissions
+                          and history. You don't need to open these.
 ```
 
 Everything stays on your computer. Your assistant's provider processes what you discuss with it under its own terms. The toolkit never sends your data to job boards, CV checkers or employers unless you ask.

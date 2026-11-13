@@ -13,7 +13,7 @@ A CV is only as good as the evidence behind it, and nobody writes all their evid
    - "Have you worked with a board or investors directly? In which role?"
 
    Also ask once: "Is there anything else from your experience that's relevant here and that I might not know about?"
-5. **Record what they confirm.** Write each answer into the right `experience/` file in the right section, in their words where possible, with a provenance line: `YYYY-MM-DD — confirmed by candidate while screening <role id>`. Update the depth in `experience/INDEX.md`. Remove answered items from `open-questions.md`, and add new gaps you noticed but didn't ask about.
+5. **Record what they confirm.** Write each answer into the right `experience/` file in the right section, in their words where possible, with a provenance line: `YYYY-MM-DD — confirmed by candidate while screening <role id>`. Update the depth in `experience/INDEX.md` when the role now meets the next level's definition there. Remove answered items from `open-questions.md`, and add new gaps you noticed but didn't ask about.
 6. **Use it.** Only now draft or score using the new evidence.
 
 ## Rules

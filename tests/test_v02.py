@@ -117,3 +117,29 @@ class Workspace(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ThirdReport(unittest.TestCase):
+    def test_init_makes_everything_private_and_parent_visible(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "Docs" / "Job Search"
+            core.init(root, demo=True)
+            self.assertEqual((root.parent.stat().st_mode & 0o777), 0o755)
+            for path in [root, *root.rglob("*")]:
+                self.assertEqual(path.stat().st_mode & 0o077, 0, path)
+
+    def test_check_cv_reports_format_without_pdf(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp).resolve() / "ws"
+            core.init(root, demo=True)
+            (root / "cv.md").write_text("# Sam Doe\n\n## Experience\n\n- **Grew** revenue\n", encoding="utf-8")
+            result = pdf.check_source(root, "cv.md")
+            self.assertEqual(result["headings"], ["Sam Doe", "Experience"])
+            (root / "bad.md").write_text("# Sam\n\n| a | b |\n", encoding="utf-8")
+            with self.assertRaises(ValueError):
+                pdf.check_source(root, "bad.md")
+
+    def test_letter_paper(self):
+        blocks = pdf.parse("# Sam Doe\n")
+        self.assertIn("size: letter", pdf.html(blocks, "letter"))
+        self.assertIn("size: A4", pdf.html(blocks))

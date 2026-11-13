@@ -181,13 +181,16 @@ def inline(value):
     return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", escape(value))
 
 
-def html(blocks):
+PAPER = {"a4": "A4", "letter": "letter"}
+
+
+def html(blocks, paper="a4"):
     chunks = []
     for tag, values in blocks:
         body = "".join(f"<li>{inline(v)}</li>" for v in values) if tag == "ul" else inline(values[0])
         chunks.append(f"<{tag}>{body}</{tag}>")
     title = next((plain(values[0]) for tag, values in blocks if tag == "h1"), "Document")
-    return ('<!doctype html><meta charset="utf-8"><title>' + escape(title) + '</title><style>' + CSS
+    return ('<!doctype html><meta charset="utf-8"><title>' + escape(title) + '</title><style>' + CSS.replace("size: A4", "size: " + PAPER[paper])
             + '</style>' + '\n'.join(chunks))
 
 
@@ -231,7 +234,14 @@ def page_count(pdf, runtime):
     return int(match[1])
 
 
-def build(root, source, output, kind):
+def check_source(root, source):
+    """Validate a CV or letter against the supported Markdown subset without building a PDF."""
+    blocks = parse(inside(root, source).read_text(encoding="utf-8"))
+    return {"format": "ok", "headings": [plain(v[0]) for t, v in blocks if t in ("h1", "h2", "h3")],
+            "blocks": len(blocks)}
+
+
+def build(root, source, output, kind, paper="a4"):
     source = inside(root, source)
     output = inside(root, output, file=False)
     require(not output.exists() and output.parent.is_dir(), "Use a new build directory with an existing parent")
@@ -244,7 +254,7 @@ def build(root, source, output, kind):
         target = stage / "build"
         target.mkdir(mode=0o700)
         source_html = target / "document.html"
-        source_html.write_text(html(blocks), encoding="utf-8")
+        source_html.write_text(html(blocks, paper), encoding="utf-8")
         pdf = target / "document.pdf"
         run(chrome(runtime["browser"], stage / "browser", pdf, source_html.as_uri()))
         require(pdf.is_file(), "Browser did not create PDF")

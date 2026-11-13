@@ -33,7 +33,7 @@ The single most valuable thing for a strong application is detailed, confirmed c
 ## After each role
 
 - Write everything into the role's experience file (accomplishments, low points, how others describe them, why they left), plus two or three stories in the story bank. Add a provenance line: `YYYY-MM-DD — career interview, confirmed by candidate`.
-- Update `experience/INDEX.md`: depth (`ok` or `rich`), interview status, last updated.
+- Update `experience/INDEX.md`: depth (using the definitions in that file), career interview `done YYYY-MM-DD`, last updated.
 - Update `career-story.md` if the session revealed a strength, a pattern or a motivation.
 - Clear the answered items from `open-questions.md`.
 - Propose updates to `master-cv.md` that the new evidence supports (a stronger bullet, a better number, a key achievement), following "Keeping the master current" in [the CV craft guide](../job-prepare/references/cv-craft.md). Apply only what they approve.
@@ -43,4 +43,4 @@ The single most valuable thing for a strong application is detailed, confirmed c
 
 - Never invent or embellish. Use their words where possible.
 - Never move low points, salary details or confidential client names into a CV or application without explicit permission.
-- If a session is cut short, save what you have and note where to resume in `experience/INDEX.md`.
+- If a session is cut short, save what you have and set the role's career interview column in `experience/INDEX.md` to `in progress (resume at: <section>)`.

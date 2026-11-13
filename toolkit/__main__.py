@@ -21,8 +21,8 @@ def parser():
     intake.add_argument("job")
     intake.add_argument("--refresh", action="store_true", help="Store an updated job snapshot before transmission")
     commands.add_parser("tracker", help="Read the canonical application ledger")
-    for name in ("lock", "unlock"):
-        commands.add_parser(name, help="Acquire or release this workspace's browser lease").add_argument("owner")
+    commands.add_parser("lock", help="Acquire this workspace's browser lease").add_argument("owner")
+    commands.add_parser("unlock", help="Release this workspace's browser lease").add_argument("owner")
     recover = commands.add_parser("recover-lock", help="Mark interrupted attempts uncertain and clear verified orphan")
     recover.add_argument("owner")
     recover.add_argument("evidence")
@@ -30,6 +30,9 @@ def parser():
     build.add_argument("source")
     build.add_argument("output")
     build.add_argument("--kind", choices=("cv", "letter"), required=True)
+    build.add_argument("--paper", choices=("a4", "letter"), default="a4", help="Page size (default a4)")
+    commands.add_parser("check-cv", help="Check a CV or letter uses the supported format, without building a PDF"
+                        ).add_argument("source")
     check = commands.add_parser("check", help="Recompute the independent review gate")
     check.add_argument("package")
     check.add_argument("review")
@@ -87,7 +90,9 @@ def main(argv=None):
         elif c == "recover-lock":
             result = core.recover_lock(root, args.owner, args.evidence)
         elif c == "build-pdf":
-            result = pdf.build(root, args.source, args.output, args.kind)
+            result = pdf.build(root, args.source, args.output, args.kind, args.paper)
+        elif c == "check-cv":
+            result = pdf.check_source(root, args.source)
         elif c == "check":
             package = quality.gate(root, args.package, args.review, final=args.final)
             result = {"review_gate": "pass", "role_id": package["role_id"],
