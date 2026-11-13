@@ -20,7 +20,9 @@ SENSITIVE = re.compile(
 
 
 def safe_domain(host):
-    return host.lower() in {"example.org", "example.net", "example.com"} or host.lower().endswith(".example")
+    # schemas.openxmlformats.org is the fixed Word XML namespace, not a link anyone visits.
+    return (host.lower() in {"example.org", "example.net", "example.com", "schemas.openxmlformats.org"}
+            or host.lower().endswith(".example"))
 
 
 def scan():

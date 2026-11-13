@@ -108,9 +108,32 @@ def transaction(root):
 DEFAULT_WORKSPACE = "~/Documents/Job Search"
 
 
+def default_workspace():
+    """~/Documents/Job Search, using the desktop's (possibly translated) Documents folder on Linux."""
+    import shutil
+    import subprocess
+    tool = shutil.which("xdg-user-dir")
+    if tool:
+        try:
+            found = subprocess.run([tool, "DOCUMENTS"], capture_output=True, text=True, timeout=5).stdout.strip()
+        except (OSError, subprocess.SubprocessError):
+            found = ""
+        if found and Path(found).is_dir() and Path(found) != Path.home():
+            return str(Path(found) / "Job Search")
+    return DEFAULT_WORKSPACE
+
+
 def init(root, demo):
     import shutil
-    root.mkdir(mode=0o700, parents=True)
+    require(not (root / "ledger.json").exists(),
+            f"A workspace already exists at {root}; nothing was changed. Use it as is.")
+    require(not root.exists() or not any(root.iterdir()),
+            f"{root} already contains files; choose an empty or new folder for the workspace")
+    if not root.parent.exists():
+        # A missing Documents folder is a normal, visible folder; only the workspace itself is private.
+        root.parent.mkdir(parents=True)
+        root.parent.chmod(0o755)
+    root.mkdir(mode=0o700, exist_ok=True)
     for template in (ROOT / "templates").iterdir():
         if template.is_file():
             shutil.copyfile(template, root / template.name)
@@ -118,6 +141,8 @@ def init(root, demo):
             shutil.copytree(template, root / template.name)
     for folder in ("roles", "sources"):
         (root / folder).mkdir(exist_ok=True)
+    for path in [root, *root.rglob("*")]:
+        path.chmod(0o700 if path.is_dir() else 0o600)
     atomic(root / "ledger.json", {"schema": 1, "demo": demo, "browser_owner": None, "roles": {}})
     return str(root)
 

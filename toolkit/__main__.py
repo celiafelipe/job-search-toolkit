@@ -6,12 +6,12 @@ from pathlib import Path
 import subprocess
 import sys
 
-from . import core, pdf, quality
+from . import core, lint, pdf, quality
 
 
 def parser():
     p = argparse.ArgumentParser(description="Local job-search package checks and application ledger; no network actions.")
-    p.add_argument("--workspace", default=os.environ.get("JOBKIT_WORKSPACE", core.DEFAULT_WORKSPACE),
+    p.add_argument("--workspace", default=os.environ.get("JOBKIT_WORKSPACE") or core.default_workspace(),
                    help="Private folder outside Git; also JOBKIT_WORKSPACE")
     commands = p.add_subparsers(dest="command", required=True)
     commands.add_parser("doctor", help="Check runtime and PDF dependencies")
@@ -21,8 +21,8 @@ def parser():
     intake.add_argument("job")
     intake.add_argument("--refresh", action="store_true", help="Store an updated job snapshot before transmission")
     commands.add_parser("tracker", help="Read the canonical application ledger")
-    for name in ("lock", "unlock"):
-        commands.add_parser(name, help="Acquire or release this workspace's browser lease").add_argument("owner")
+    commands.add_parser("lock", help="Acquire this workspace's browser lease").add_argument("owner")
+    commands.add_parser("unlock", help="Release this workspace's browser lease").add_argument("owner")
     recover = commands.add_parser("recover-lock", help="Mark interrupted attempts uncertain and clear verified orphan")
     recover.add_argument("owner")
     recover.add_argument("evidence")
@@ -30,6 +30,12 @@ def parser():
     build.add_argument("source")
     build.add_argument("output")
     build.add_argument("--kind", choices=("cv", "letter"), required=True)
+    build.add_argument("--paper", choices=("a4", "letter"), default="a4", help="Page size (default a4)")
+    commands.add_parser("lint", help="Check the workspace files the agent maintains (rubric, INDEX, provenance, screenings)")
+    commands.add_parser("extract-text", help="Print the text of a CV the candidate supplied (.docx, .pdf, .txt, .md)"
+                        ).add_argument("source")
+    commands.add_parser("check-cv", help="Check a CV or letter uses the supported format, without building a PDF"
+                        ).add_argument("source")
     check = commands.add_parser("check", help="Recompute the independent review gate")
     check.add_argument("package")
     check.add_argument("review")
@@ -62,14 +68,26 @@ def main(argv=None):
         root = core.workspace(args.workspace, initialized=c not in ("init", "doctor"))
         if c == "doctor":
             runtime = pdf.tools()
-            result = {"python": sys.version.split()[0], "workspace": str(root),
+            check = pdf.probe(runtime)
+            hints = pdf.install_hints(runtime)
+            if all(runtime.values()) and check != "ok" and "chrome-headless-shell" not in check:
+                hints.append("The PDF tools are installed but a test export failed: " + check)
+                hints.append("Most reliable fix on Linux, containers and WSL: 'npx @puppeteer/browsers install "
+                             "chrome-headless-shell@stable', then set JOBKIT_CHROME to the chrome-headless-shell "
+                             "path it prints, and run doctor again.")
+            result = {"python": sys.version.split()[0], "python_ok": sys.version_info >= (3, 9),
+                      "workspace": str(root),
                       "pdf_dependencies": {name: bool(path) for name, path in runtime.items()},
-                      "pdf_ready": all(runtime.values()),
+                      "pdf_export_test": check,
+                      "pdf_ready": check == "ok",
                       "workspace_exists": (root / "ledger.json").is_file(),
-                      "fix": pdf.install_hints(runtime),
+                      "fix": hints,
                       "scope": "No browser session, site access, or authenticated tool was checked."}
         elif c == "init":
-            result = core.init(root, args.demo)
+            core.init(root, args.demo)
+            result = {"workspace": str(root),
+                      "message": f"Created the private job search folder at {root}. Next: add the candidate's "
+                                 "CV or LinkedIn PDF to its sources folder."}
         elif c == "intake":
             result = core.intake(root, args.job, args.refresh)
         elif c == "tracker":
@@ -79,7 +97,16 @@ def main(argv=None):
         elif c == "recover-lock":
             result = core.recover_lock(root, args.owner, args.evidence)
         elif c == "build-pdf":
-            result = pdf.build(root, args.source, args.output, args.kind)
+            result = pdf.build(root, args.source, args.output, args.kind, args.paper)
+        elif c == "lint":
+            result = lint.run(root)
+        elif c == "extract-text":
+            print(pdf.extract_text(root, args.source), end="")
+            return 0
+        elif c == "check-cv":
+            result = pdf.check_source(root, args.source)
+            result["warnings"] = lint.cv_warnings(core.inside(root, args.source).read_text(encoding="utf-8"),
+                                                  args.source)
         elif c == "check":
             package = quality.gate(root, args.package, args.review, final=args.final)
             result = {"review_gate": "pass", "role_id": package["role_id"],
@@ -94,6 +121,8 @@ def main(argv=None):
             result = core.resolve(root, args.role_id, args.attempt_id, args.outcome,
                                   args.evidence, args.owner)
         print(json.dumps(result, indent=2, ensure_ascii=False))
+        if c == "lint":
+            return 0 if not result["errors"] else 1
         return 0 if c != "doctor" or result["pdf_ready"] else 1
     except (OSError, ValueError, KeyError, TypeError, AttributeError, subprocess.TimeoutExpired) as exc:
         print(f"Stopped: {exc}", file=sys.stderr)

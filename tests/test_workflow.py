@@ -196,7 +196,7 @@ class Workflow(unittest.TestCase):
             self.act("transmit")
 
 
-@unittest.skipUnless(all(pdf.tools().values()), "Chrome and Poppler are required for integration")
+@unittest.skipUnless(pdf.export_check() == "ok", "PDF export unavailable here: " + pdf.export_check())
 class PDFIntegration(unittest.TestCase):
     def test_real_build_then_pdf_tamper(self):
         with tempfile.TemporaryDirectory() as temp:

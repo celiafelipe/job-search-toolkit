@@ -37,7 +37,7 @@ def fixture(root, with_cv=True, inspect_pages=None):
     registered = core.intake(root, job["path"])
     screen = data("screen.json", {"role_id": ROLE, "score": 88, "verdict": "pursue",
                                   "hard_gaps": [], "unknowns": [],
-                                  "rationale": "Direct evidence of accessible exhibit signage and handover training."})
+                                  "rationale": {"criteria": [], "role_evidence": ["Accessible exhibit signage"], "candidate_evidence": [{"claim": "Direct evidence of accessible exhibit signage and handover training.", "source": "experience"}], "user_override": None}})
     inspection = data("inspection.json", {
         "role_id": ROLE, "destination_url": DESTINATION, "observed_at": core.now(),
         "platform": "unknown", "platform_evidence": "Fictional employer form has no vendor label.",
@@ -150,4 +150,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except ValueError as exc:
+        print(f"Demo stopped: {exc}\nRun 'python3 -m toolkit doctor' and follow its 'fix' hints.", file=sys.stderr)
+        sys.exit(1)

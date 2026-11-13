@@ -26,20 +26,22 @@ The single most valuable thing for a strong application is detailed, confirmed c
 
 1. **Context:** what the organization was, why they joined, what they were hired to do, the reporting line, the team and the scope.
 2. **Accomplishments:** three to five, most significant first. For each: the situation, their contribution, the outcome and how it was measured.
-3. **Low points:** mistakes, things that didn't work, what they'd do differently. (This is for interview prep; it stays out of the CV unless they say otherwise.)
-4. **People:** how their manager and their team or peers would describe their strengths and areas to improve.
-5. **Why they left**, in a way they are comfortable saying in interviews.
+3. **Strategy and business outcomes** (executive and senior tracks; always ask): what strategy or direction they set, the operating model they built, and the business result it drove (revenue, margin, retention, cost, market position), not only delivery and scale. Executive CVs that skip this read as senior managers.
+4. **Low points:** mistakes, things that didn't work, what they'd do differently. (This is for interview prep; it stays out of the CV unless they say otherwise.)
+5. **People:** how their manager and their team or peers would describe their strengths and areas to improve.
+6. **Why they left**, in a way they are comfortable saying in interviews.
 
 ## After each role
 
-- Write everything into the role's experience file (accomplishments, low points, how others describe them, why they left), plus two or three stories in the story bank. Add a provenance line: `YYYY-MM-DD — career interview, confirmed by candidate`.
-- Update `experience/INDEX.md`: depth (`ok` or `rich`), interview status, last updated.
+- Write everything into the role's experience file (accomplishments, low points, how others describe them, why they left), plus two or three stories in the story bank. Add a provenance line: `- YYYY-MM-DD | career interview | confirmed by candidate | <what it covers>`. Where an answer corrects an imported claim, follow "Imported facts can be corrected" in [the learning loop](../../docs/LEARNING-LOOP.md).
+- Update `experience/INDEX.md`: depth (using the definitions in that file), career interview `done YYYY-MM-DD`, last updated.
 - Update `career-story.md` if the session revealed a strength, a pattern or a motivation.
 - Clear the answered items from `open-questions.md`.
+- Propose updates to `master-cv.md` that the new evidence supports (a stronger bullet, a better number, a key achievement), following "Keeping the master current" in [the CV craft guide](../job-prepare/references/cv-craft.md). Apply only what they approve.
 - Show a short summary of what you captured, mention the one or two strongest new proof points, and offer to continue with the next role now or another day.
 
 ## Rules
 
 - Never invent or embellish. Use their words where possible.
 - Never move low points, salary details or confidential client names into a CV or application without explicit permission.
-- If a session is cut short, save what you have and note where to resume in `experience/INDEX.md`.
+- If a session is cut short, save what you have and set the role's career interview column in `experience/INDEX.md` to `in progress (resume at: <section>)`.

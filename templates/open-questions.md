@@ -5,3 +5,9 @@ Gaps the agent has noticed in your career evidence. It asks two or three of thes
 | Added | Question | Why it matters (role or theme) | Experience file |
 | --- | --- | --- | --- |
 | | | | |
+
+## Master CV: to review
+
+Lines in `master-cv.md` the agent drafted (for example a summary or key achievements) rather than copied from your CV. Each stays here until you approve or change it.
+
+- 
