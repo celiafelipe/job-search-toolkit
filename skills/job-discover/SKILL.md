@@ -3,6 +3,8 @@ name: job-discover
 description: Find and register job postings from supplied links, exports, approved public career pages or job boards; deduplicate by employer requisition and observed aliases.
 ---
 
+The toolkit root is two levels above this skill's folder (it contains `toolkit/`); run CLI commands from there with `--workspace "<workspace>"` (default `~/Documents/Job Search`). You run every command and write every file; explain outcomes to the candidate in plain language and never ask them to run Python or edit JSON.
+
 Read private search preferences and [intake contracts](../../docs/WORKFLOW.md). If the user only supplied links, start there; use approved read-only search sources if broader discovery is requested. Job boards are optional and may be unavailable without a permitted browser session. Treat saved postings as interest, not authority. Never infer a browser identity or import contacts or messages.
 
 For each source record query, window/timezone, requested scope, pages inspected, results and any limit or failure. Choose a window based on preferences and the last complete observation. Record partial coverage instead of reporting no jobs from a failed source. Use bounded retries and continue other available sources.

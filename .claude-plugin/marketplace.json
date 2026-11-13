@@ -1,0 +1,15 @@
+{
+  "name": "job-search-toolkit",
+  "owner": {
+    "name": "Job Search Toolkit contributors"
+  },
+  "description": "Agent skills for a senior-level job search: career evidence, screening, tailored CVs and tracked applications.",
+  "plugins": [
+    {
+      "name": "job-search-toolkit",
+      "source": "./",
+      "description": "Start with \"set up my job search\". It imports your CV or LinkedIn PDF, interviews you about your career, then screens jobs and tailors CVs from that evidence.",
+      "license": "MIT"
+    }
+  ]
+}

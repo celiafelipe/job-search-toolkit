@@ -1,0 +1,23 @@
+{
+  "name": "job-search-toolkit",
+  "description": "An AI job-search partner for senior leaders: career evidence, job screening, truthful tailored CVs and tracked applications.",
+  "version": "0.2.0",
+  "author": {
+    "name": "Job Search Toolkit contributors"
+  },
+  "license": "MIT",
+  "keywords": ["job-search", "career", "cv", "resume", "executive", "interview"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Job Search Toolkit",
+    "shortDescription": "Your AI partner for a senior job search",
+    "longDescription": "Builds a private career evidence bank from your CV, LinkedIn export and a guided career interview. Then it screens roles against your criteria, tailors truthful CVs for each one, has them reviewed independently, and tracks applications. Everything stays in a private folder on your computer, and it never applies anywhere without your explicit permission.",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": [
+      "Set up my job search",
+      "Is this job a good fit for me?",
+      "Tailor my CV for this role"
+    ]
+  }
+}

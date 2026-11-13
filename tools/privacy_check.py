@@ -7,13 +7,14 @@ import sys
 from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
-TOP = {"README.md", "LICENSE", ".gitignore"}
-FOLDERS = {"toolkit", "skills", "templates", "docs", "tests", "examples", "tools"}
+TOP = {"README.md", "LICENSE", ".gitignore", "AGENTS.md", "CLAUDE.md", "CHANGELOG.md"}
+FOLDERS = {"toolkit", "skills", "templates", "docs", "tests", "examples", "tools",
+           ".claude-plugin", ".codex-plugin"}
 TEXT_EXTENSIONS = {".py", ".md", ".json"}
 EMAIL = re.compile(r"[A-Z0-9._%+-]+@([A-Z0-9.-]+\.[A-Z]{2,})", re.I)
 URL = re.compile(r"https?://[^\s'\"><)`]+")
 SENSITIVE = re.compile(
-    r"(?:/Users/[A-Z0-9._-]+/|/home/[A-Z0-9._-]+/|[A-Z]:\\Users\\[A-Z0-9._-]+"
+    r"(?:/Users/[A-Z0-9._-]+/|/home/[A-Z0-9._-]+/|[A-Z]:\\Users\\[A-Z0-9._-]+|"
     r"\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[A-Z0-9]{16})\b|"
     r"-----BEGIN [A-Z ]*PRIVATE " r"KEY-----)", re.I)
 

@@ -11,7 +11,7 @@ from . import core, pdf, quality
 
 def parser():
     p = argparse.ArgumentParser(description="Local job-search package checks and application ledger; no network actions.")
-    p.add_argument("--workspace", default=os.environ.get("JOBKIT_WORKSPACE", "~/.job-search-workspace"),
+    p.add_argument("--workspace", default=os.environ.get("JOBKIT_WORKSPACE", core.DEFAULT_WORKSPACE),
                    help="Private folder outside Git; also JOBKIT_WORKSPACE")
     commands = p.add_subparsers(dest="command", required=True)
     commands.add_parser("doctor", help="Check runtime and PDF dependencies")
@@ -65,6 +65,8 @@ def main(argv=None):
             result = {"python": sys.version.split()[0], "workspace": str(root),
                       "pdf_dependencies": {name: bool(path) for name, path in runtime.items()},
                       "pdf_ready": all(runtime.values()),
+                      "workspace_exists": (root / "ledger.json").is_file(),
+                      "fix": pdf.install_hints(runtime),
                       "scope": "No browser session, site access, or authenticated tool was checked."}
         elif c == "init":
             result = core.init(root, args.demo)

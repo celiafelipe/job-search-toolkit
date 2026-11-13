@@ -3,6 +3,8 @@ name: job-apply
 description: Inspect an employer application form and execute a reviewed application only when the candidate has authorized the exact actions and scope.
 ---
 
+The toolkit root is two levels above this skill's folder (it contains `toolkit/`); run CLI commands from there with `--workspace "<workspace>"` (default `~/Documents/Job Search`). You run every command and write every file; explain outcomes to the candidate in plain language and never ask them to run Python or edit JSON.
+
 Read [the execution contract](../../docs/WORKFLOW.md) and [form and recovery guidance](../../docs/APPLY.md). Work on one canonical requisition, reconcile history and lock the private workspace for browser work. This does not lock unrelated tabs or tools.
 
 Inspect the employer form read-only before preparing. Capture actual destination, requisition, field prompts and labels, document requirements, limits, consent wording, conditions, and visible ATS evidence. Mark partial coverage honestly; do not reveal fields through unauthorized data entry. Hold for a user handoff on login, CAPTCHA, unsupported automation, assessment or unclear authority.
