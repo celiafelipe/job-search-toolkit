@@ -17,6 +17,10 @@ The user must actually agree to this scope and the maximum actions; an agent mus
 
 In either mode, take explicit current decisions on sensitive declarations, optional consent, and new facts. Reuse previously confirmed answers only within their exact scope. Record unresolved exceptions with prompt, source checked, safe suggested value if supported, requested scope, role, and next action. Re-evaluate any conflicting, revoked, outdated, or incomplete authorization before acting.
 
+## The candidate's own CV
+
+When the candidate chose their own CV, attach exactly the PDF named in the reviewed package (its current digest must match), never a copy you re-exported, converted or edited. If they want a per-job version, they make it in their own tool; until that file is supplied and checked with `review-cv --save`, hold the role as "waiting for your updated CV" rather than sending the previous version. Readability findings are advice for the candidate, not a reason to block an application they have approved. This upload path, like the rest of the apply flow, has not yet been tested on a real employer form.
+
 ## One execution owner
 
 Use `lock RUN_ID` before shared browser work and keep the unique ID through the run. Read the ledger before resuming; same run reuses its lease for nested stages. Separate prep/review workers do not operate the form. Release your own lease on a clean hold/exit with `unlock RUN_ID`. This is a cooperative workspace lease, not a lock on unrelated tools, browsers or machines. Do not use copied workspaces or network-shared filesystems for concurrent application work.
