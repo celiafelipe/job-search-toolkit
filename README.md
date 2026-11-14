@@ -49,6 +49,7 @@ The assistant will:
 | "Is this a good fit?" plus a job link or text | Verdict, what's strong, what's thin, two or three questions ([job-screen](skills/job-screen/SKILL.md)) |
 | "Tailor my CV for this role" | A tailored CV and a checked PDF, with a summary of changes and interview talking points ([job-prepare](skills/job-prepare/SKILL.md)) |
 | "Find roles that match my criteria" | Searches the sources you approved and registers new postings ([job-discover](skills/job-discover/SKILL.md)) |
+| "Check for new jobs every morning" | After a first search together, a daily run on your computer that leaves a short summary ([job-autopilot](skills/job-autopilot/SKILL.md)) |
 | "Check this application before I send it" | An independent review in a fresh context ([job-review](skills/job-review/SKILL.md)) |
 | "I applied to X" / "Where are my applications?" | Records and tracks applications and prevents duplicates ([job-track](skills/job-track/SKILL.md)) |
 | "Apply for me" | Only after you explicitly grant permission for that exact action ([job-apply](skills/job-apply/SKILL.md), [rules](docs/APPLY.md)) |
