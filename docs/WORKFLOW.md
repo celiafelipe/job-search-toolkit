@@ -14,12 +14,15 @@ Use `shasum -a 256 FILE` (macOS) or `sha256sum FILE` (Linux), or `core.record(Pa
 | --- | --- |
 | Discover | Supplied links or approved sources and `search-preferences.md` |
 | Screen | Job posting, `search-preferences.md`, `rubric.md` and relevant candidate evidence |
-| Prepare | Posting, screening, `profile.md`, `master-cv.md` and the relevant `experience/` files. A form inspection and confirmed answers are needed only for a reviewed package that will be submitted; without them the tailored CV is a provisional draft the candidate can use directly. |
+| Prepare | Posting, screening, `profile.md`, `master-cv.md` (or their own CV in `my-cv/`) and the relevant `experience/` files. A form inspection and confirmed answers are needed only for a reviewed package that will be submitted; without them the tailored CV is a provisional draft the candidate can use directly. |
 | Review | Raw posting, form inspection, approved sources, then exact prepared package |
 | Apply | Passing independent review, complete live recheck, action authority and a browser that supports the required interaction |
 | Track | Registered role and matching, verified receipt or an unresolved attempt to reconcile |
 
-Start the CV from [the supported Markdown template](../templates/master-cv.md). For an existing CV in another format, extract or transcribe into that template and check it against the original; leave the original intact.
+The candidate chooses how their CV is made, once at setup (recorded as `CV choice` in `profile.md`), and can switch later:
+
+- **Our template.** Start from [the supported Markdown template](../templates/master-cv.md). For an existing CV in another format, extract or transcribe into that template and check it against the original; leave the original intact. The agent tailors it per role and builds the PDF with `build-pdf`.
+- **Their own CV.** They keep a PDF they designed themselves (Word, Canva, Pages...) in `my-cv/`. The toolkit never edits, converts or rebuilds it. `review-cv <file.pdf> --save <report.json>` reads it the way a simple applicant tracking system would and returns advisory findings: `readability` (no or little extractable text, garbled fonts, contact details missing from the text, columns that can scramble reading order, missing standard headings, icon-font glyphs, skill ratings as dots or stars, letter-spaced headings, images, length) and `content` (the same rules `lint` applies to `master-cv.md`, plus duty-style bullets, few numbers, and figures not yet in `experience/`). It always exits 0 and never blocks. The person makes any edits in their own tool and supplies a new PDF; run `review-cv --save` again on that exact file. Per-job versions go in `roles/<role_id>/my-cv/` with their own saved report.
 
 ## 1. Intake and screening
 
@@ -56,7 +59,7 @@ Build only PDFs the form accepts. Use UTF-8 plain Markdown: headings with one to
 python3 -m toolkit --workspace "<workspace>" build-pdf roles/role-1/cv.md roles/role-1/cv-build --kind cv
 ```
 
-Add `--paper letter` for US Letter (default A4; the receipt records it). `check-cv <file>` checks the format without building. Other helpers: `extract-text <file>` prints the text of a supplied `.docx`, `.pdf`, `.txt` or `.md`; `lint` checks the hand-maintained workspace files (rubric weights total 100, every experience file has an INDEX row and a dated provenance line, the master CV parses, and each `screen.json` has the contract's fields).
+Add `--paper letter` for US Letter (default A4; the receipt records it). `check-cv <file>` checks the format without building; `review-cv <file.pdf>` gives advisory feedback on a CV the candidate designed themselves. Other helpers: `extract-text <file>` prints the text of a supplied `.docx`, `.pdf`, `.txt` or `.md`; `lint` checks the hand-maintained workspace files (rubric weights total 100, every experience file has an INDEX row and a dated provenance line, the master CV parses, and each `screen.json` has the contract's fields).
 
 The output contains the exact PDF, generated HTML, two recoverability views, every-page PNGs and `build.json`. Never handwrite the build receipt. Both text modes must recover each source passage; check order warnings, repeated text, chronology and attribution manually. An identical upload-named PDF may reuse the build if the new path and hash are included in the reviewed package.
 
@@ -65,6 +68,7 @@ Prepare `package.json` with:
 - `schema: 1`, `role_id`, `destination_url`, `preparer_id`, `preparation_session` (actual fresh run/context identifier).
 - Path/hash references `job` (registered immutable intake snapshot), `job_description`, `screen`, `inspection`, `answers`, `evidence_map`.
 - `attachments`: list of `{"kind":"cv","file":{...},"build":{...}}` with exact outgoing file and build receipt path/hash references. Use `[]` if no documents are needed.
+- For the candidate's own CV, use `{"kind":"cv","source":"candidate","file":{...},"readability":{...}}` instead: the exact PDF they supplied and the `review-cv --save` report for those exact bytes, and no `build`. Only a CV can be candidate-supplied; a required letter PDF is built here. `check` requires the report to match the file's bytes but never fails on its findings.
 
 ## 3. Independent review
 
@@ -72,8 +76,8 @@ Use a separate fresh context. First write a ranked independent evidence assessme
 
 - `schema: 1`, `role_id`, `status` (`pass`, `revise`, or `needs_fact`), `package` path/hash, `reviewer_id`, `review_session`, `independent_before_draft` (true only if actually performed), `unresolved_findings` (must be empty to pass).
 - Path/hash references `independent_evidence` and `review_notes`.
-- `visual`: map for each outgoing PDF kind to `pdf_sha256`, `pages` (ordered path/hash refs for every image from the build), `findings` (specific visual and recovery observations), and `warning_resolutions` (map of every warning ID to a specific decision grounded in the views). Use `{}` if no PDFs.
+- `visual`: map for each outgoing PDF built here (not the candidate's own CV) to `pdf_sha256`, `pages` (ordered path/hash refs for every image from the build), `findings` (specific visual and recovery observations), and `warning_resolutions` (map of every warning ID to a specific decision grounded in the views). Use `{}` if no PDFs were built here. A candidate-supplied CV has no `visual` entry: its design is theirs. The reviewer still checks every answer, the facts on that CV against `experience/`, and records the readability findings they saw in the review notes.
 
 Run `check PACKAGE REVIEW`; `--final` also checks that inspection coverage is complete. This test checks manifest consistency and current bytes. It does not prove genuine independence, auth provenance, successful upload, or receipt truth. A human or execution agent must check actual worker identities/contexts and artifacts. Use separate roles even for base CV reuse; if a separate fresh context is unavailable, stop at review pending.
 
-[The fictional fixture](../examples/demo.py) gives complete valid JSON examples for each contract. For authority, upload checks, receipt schemas and recovery, see [execution](APPLY.md).
+[The fictional fixture](../examples/demo.py) gives complete valid JSON examples for each contract, including a candidate-supplied CV (`own_cv=True`). For authority, upload checks, receipt schemas and recovery, see [execution](APPLY.md).

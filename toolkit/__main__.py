@@ -6,7 +6,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-from . import core, lint, pdf, quality
+from . import core, lint, owncv, pdf, quality
 
 
 def parser():
@@ -36,6 +36,10 @@ def parser():
                         ).add_argument("source")
     commands.add_parser("check-cv", help="Check a CV or letter uses the supported format, without building a PDF"
                         ).add_argument("source")
+    own = commands.add_parser("review-cv", help="Advisory feedback on the candidate's own CV PDF (readability and "
+                              "content); never changes the file")
+    own.add_argument("source")
+    own.add_argument("--save", help="Also save the report as JSON (needed to attach this exact PDF)")
     check = commands.add_parser("check", help="Recompute the independent review gate")
     check.add_argument("package")
     check.add_argument("review")
@@ -107,6 +111,8 @@ def main(argv=None):
             result = pdf.check_source(root, args.source)
             result["warnings"] = lint.cv_warnings(core.inside(root, args.source).read_text(encoding="utf-8"),
                                                   args.source)
+        elif c == "review-cv":
+            result = owncv.review(root, args.source, args.save)
         elif c == "check":
             package = quality.gate(root, args.package, args.review, final=args.final)
             result = {"review_gate": "pass", "role_id": package["role_id"],
