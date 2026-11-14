@@ -31,11 +31,12 @@ Discovery keeps four files in the workspace, under `discovery/`. Create them on 
 
 ## Window and checkpoints
 
-- **Window start:** the source's `last_success` minus one day of overlap. If there is none (first run), use the last 14 days. If the candidate missed runs (a weekend, a holiday), the window simply grows to cover the gap. Report the actual window you used.
+- **Window start:** the source's `last_success` minus one day of overlap. If there is none (first run), use the search window in `search-preferences.md`, or the last 14 days if it doesn't set one. If the candidate missed runs (a weekend, a holiday), the window simply grows to cover the gap. Report the actual window you used.
 - **Advance a checkpoint only when every planned check for that source succeeded and its results are saved in the inbox.** Write checkpoints after the inbox, never before.
 - **Never advance a failed or partial source.** Keep its old checkpoint so the next run covers the gap. Do not advance any checkpoint during a test or a rehearsal that stopped early.
 - Keep retryable failures (a posting that would not load) in `retry` so deduplication does not hide them forever.
 - A retry of the same run must be safe: it must not add a role to the inbox twice.
+- If `state.json` exists but can't be read, never overwrite or rebuild it. Report coverage as **failed** with "state file unreadable" under what needs the candidate, and stop.
 
 ## Dedupe and screen
 
@@ -76,11 +77,13 @@ Every role gets a clickable link, a score or "provisional", a one-line reason an
 
 ## Run report
 
-Always say which of these it was. Never report "nothing found" when a check did not run.
+Report two things separately: how complete the coverage was, and how many new roles were found. Never report "nothing found" when a check did not run.
 
-- **Nothing new:** every source ran and there were no new roles. One line.
-- **Partial coverage:** some checks ran; name the ones that didn't and why.
-- **Check failed:** a source could not run at all.
+- **Complete:** every planned check ran.
+- **Partial:** at least one check ran and at least one didn't; name the ones that didn't and why.
+- **Failed:** no check ran, or the run stopped before saving (for example, an unreadable state file).
+
+Then the count: "3 new roles" or "nothing new". A complete run with nothing new is one line.
 
 ## Learning log
 

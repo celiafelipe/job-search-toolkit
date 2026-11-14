@@ -11,6 +11,7 @@ The toolkit root is two levels above this skill's folder. The workspace defaults
 
 - Read `search-preferences.md`, `rubric.md` and [the intake contract](../../docs/WORKFLOW.md#1-intake-and-screening).
 - Read `discovery/sources.md`. If it doesn't exist and they want more than the links they shared, write it with them first from [the template](references/sources-template.md): which kinds of source they approved in `search-preferences.md`, which browser account, which alert sender, and the live searches built from their target titles and locations. Change it later only when they agree.
+- Take the workspace lease with `lock <run ID>` (for example `discover-2030-01-15T1030`) before reading the discovery files, and release it with `unlock <run ID>` after the last write, even if sources failed. If a scheduled daily run already holds it for this run, don't lock again. If another run holds it, stop and tell the candidate.
 - Read `discovery/state.json`, `discovery/inbox.md`, `discovery/log.md` and the tracker if they exist ([state and inbox](references/state-and-inbox.md)).
 - If they shared links, start with those. Search more widely only if they ask, and only on sources they approved.
 - Job boards that need a login may not be reachable. Never log in for them, import their contacts or messages, or guess which account to use. Hand over to them instead.
@@ -36,10 +37,10 @@ For each source, work out its date window from its last successful check ([state
 1. Add a dated block to the top of `discovery/inbox.md`: coverage and actual windows, saved roles first, then ranked roles with clickable links, conflicts to review, one-line skips, duplicates and failures ([inbox format](references/state-and-inbox.md#inbox)).
 2. Only then advance the checkpoints of sources that fully succeeded. Never advance a failed or partial one.
 3. Add one entry to `discovery/log.md` ([learning log](references/state-and-inbox.md#learning-log)).
-4. Tell the candidate in a few lines whether it was **nothing new**, **partial coverage** or **check failed**, what's worth a look, and where the inbox is. Offer to screen the most promising ones in depth ([job-screen](../job-screen/SKILL.md)).
+4. Tell the candidate in a few lines how complete the coverage was, how many new roles there are, what's worth a look, and where the inbox is. Offer to screen the most promising ones in depth ([job-screen](../job-screen/SKILL.md)).
 
 ## Offer autopilot after a good first run
 
-If this was the candidate's first discovery run on their own approved sources, every planned source ran (or failed for a clear, reported reason), and they found the inbox useful, offer once: "I can run this for you every morning and leave a short summary. Want to set that up?" On yes, go to [job-autopilot](../job-autopilot/SKILL.md); this run counts as its rehearsal. Don't offer again if they decline.
+If this was the candidate's first discovery run on their own approved sources, every source worked, including every browser source (a login page or CAPTCHA means it didn't), and they found the inbox useful, offer once: "I can run this for you every morning and leave a short summary. Want to set that up?" On yes, go to [job-autopilot](../job-autopilot/SKILL.md); this run counts as its rehearsal. Don't offer again if they decline.
 
 This stage never applies, uploads, saves jobs on a board, or changes their search preferences.

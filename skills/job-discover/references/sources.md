@@ -14,9 +14,9 @@ Every source uses the window and checkpoint rules in [state and inbox](state-and
 ## Saved jobs on a job board
 
 1. Open the board's saved-jobs list through its visible menus. Go through every page; note it if you could not reach them all.
-2. Remember saved job IDs in the state. Saved jobs are not limited by posting date. The first run is a baseline: it does not mean those saves are new.
-3. For each newly saved job:
-   - Already in the inbox or tracker: add a **Saved by you** tag to the existing entry and mention it once as a new interest signal. Do not create a second entry or re-score unchanged evidence.
+2. Remember saved job IDs in the state. Saved jobs are not limited by posting date.
+3. On the first run, treat every saved job not already in the inbox or tracker as new, and label it "saved before setup" so it isn't presented as a fresh save. After that, handle only jobs saved since the last run. For each such job:
+   - Already in the inbox or tracker: list it under today's **Saved by you** with "first seen on <date>" and its existing score. Leave the older inbox block as it is, and don't re-score unchanged evidence.
    - Already applied: leave it as applied.
    - Previously skipped: list it under **Saved: conflicts to review**, with the earlier reason and the criterion it conflicts with. Never discard the save silently and never override the skip yourself.
 4. A saved job with a gap or conflict still appears in the digest: link, why it could be worth pursuing, the gap, and the decision needed. Mention it once and keep it visible in the inbox. Raise it again only if something material changes.

@@ -37,6 +37,7 @@ A request for one stage ends at that stage unless they ask for more.
 
 - Check that the workspace exists (`python3 -m toolkit --workspace "<path>" doctor` reports `workspace_exists`).
 - Read the tracker (`python3 -m toolkit --workspace "<path>" tracker`). Before anything new, reconcile any uncertain application: never retry it.
+- If the tracker shows the workspace lease held by an earlier run (such as `autopilot-…`) that is not running now, ask the candidate to confirm it stopped (for example, the computer went to sleep). With their confirmation, save private evidence JSON with `owner`, `kind: "user_confirmed_inactive"`, `observed_at` and their words as `observation`, then run `recover-lock <owner> <evidence>` ([one execution owner](../../docs/APPLY.md#one-execution-owner)). Never clear it without that confirmation.
 - Glance at `open-questions.md`. If a gap matters for today's work, ask about it as part of the [learning loop](../../docs/LEARNING-LOOP.md).
 
 ## Full pipeline (when asked)
