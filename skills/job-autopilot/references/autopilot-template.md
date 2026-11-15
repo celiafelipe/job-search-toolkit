@@ -18,6 +18,13 @@ All sources in `discovery/sources.md`, unless listed otherwise here. (Example: "
 
 Add `apply` only if `policy.json` holds a scoped grant (see `docs/APPLY.md` in the toolkit). Maximum applications per run: 0.
 
+## CV
+
+Only for applications, when they use their own CV (`CV choice: own` in `profile.md`). One of:
+
+- fixed: `my-cv/Firstname-Lastname-CV.pdf` (sent as is, every time)
+- per job: hold each role as "waiting for your updated CV" until they supply a new PDF in that role's `my-cv/` folder
+
 ## Digest
 
 - At most 5 roles worth a look, saved roles first.

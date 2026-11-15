@@ -12,7 +12,7 @@ Read [the CV craft guide](references/cv-craft.md) before writing. It is the stan
 ## Inputs
 
 - The job posting and the screening (run [job-screen](../job-screen/SKILL.md) first if there isn't one).
-- `profile.md` (career track, contact details, what to keep private), `master-cv.md`, `career-story.md`, and the experience files.
+- `profile.md` (career track, contact details, what to keep private, and `CV choice`), `master-cv.md` or their own CV in `my-cv/`, `career-story.md`, and the experience files.
 - If a real application form will be used: its observed questions and attachment rules. Without them, prepare a provisional draft and mark form constraints as unknown.
 
 For an application that will go through the full reviewed workflow, work in a fresh context separate from the reviewer, per [the package contract](../../docs/WORKFLOW.md).
@@ -32,6 +32,14 @@ For an application that will go through the full reviewed workflow, work in a fr
    ```
 
    Run `check-cv roles/<role-id>/cv.md` first if you want to catch format problems quickly. For US Letter paper (common in the US and Canada), add `--paper letter`. Use a new output folder for each build (`cv-build`, `cv-build-2`, …). Open `page-*.png` yourself and check the layout, page breaks, lone lines at the top of a page and clipping; reword to fix. If you can't view images, use the page count in the build result and `layout.txt` in the build folder (where each page's text starts and ends), and tell the candidate to glance at the PDF themselves. If the build reports text it could not read back, it names the passages: simplify or reword them. If they need a different paper size, build it in its own folder and check its pages too: page breaks differ. Then copy the final build's `document.pdf` to an upload-ready name such as `roles/<role-id>/Firstname-Lastname-CV-Employer.pdf`, write which build folder it came from in `roles/<role-id>/notes.md`, and tell the candidate where it is. (If that copy goes into a reviewed package, reference the copy's path and hash.) If PDF export fails, run `doctor` and follow its `fix` hints.
+
+## If they use their own CV
+
+When `profile.md` says `CV choice: own`, steps 1, 2 and 4 to 6 stay the same, but you never write, edit or build their CV. Instead of steps 3 and 7:
+
+1. **Suggest, don't edit.** Write `roles/<role-id>/cv-suggestions.md`: at most five concrete changes for this job, each with where it goes, the suggested wording, and the experience file that supports it (for example "Move the Orchard Co pricing result to the top of that role: 'Grew paid conversion 18% in two quarters' (experience/2020-orchard.md)"). Only use confirmed evidence. Show them the list in plain words.
+2. **They decide.** Some people send the same CV everywhere; that's fine. If they make changes, they do it in their own tool and send you the new PDF. Save it unchanged as `roles/<role-id>/my-cv/<file>.pdf` and run `review-cv roles/<role-id>/my-cv/<file>.pdf --save roles/<role-id>/my-cv/readability.json`. Mention anything new that a computer can't read, and check every fact on it against the experience files; ask about any figure the `content` warnings say isn't recorded yet, and record what they confirm ([the learning loop](../../docs/LEARNING-LOOP.md)).
+3. **Name the file that goes out.** Write in `roles/<role-id>/notes.md` which PDF is for this job: the per-job version, or their main one in `my-cv/` with its report. For a reviewed package, attach it with `"source": "candidate"` and its report, as in [the package contract](../../docs/WORKFLOW.md#2-inspection-and-preparation).
 
 ## Hand off
 

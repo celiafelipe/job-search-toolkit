@@ -6,13 +6,40 @@ from pathlib import Path
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from toolkit import core, pdf, quality  # noqa: E402
+from toolkit import core, owncv, pdf, quality  # noqa: E402
 
 ROLE = "orchard-lantern-57"
 DESTINATION = "https://careers.orchard-lantern.example/roles/57"
 
 
-def fixture(root, with_cv=True, inspect_pages=None):
+def simple_pdf(path, lines):
+    """A tiny one-page text PDF, standing in for a CV the candidate designed in their own tool."""
+    text = "".join(f"({line}) Tj 0 -16 Td " for line in lines)
+    stream = f"BT /F1 11 Tf 56 780 Td {text}ET".encode("latin-1")
+    objects = [b"<< /Type /Catalog /Pages 2 0 R >>", b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+               b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> "
+               b"/Contents 5 0 R >>", b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+               b"<< /Length %d >>\nstream\n%s\nendstream" % (len(stream), stream)]
+    out, offsets = bytearray(b"%PDF-1.4\n"), []
+    for number, body in enumerate(objects, 1):
+        offsets.append(len(out))
+        out += b"%d 0 obj\n%s\nendobj\n" % (number, body)
+    xref = len(out)
+    out += b"xref\n0 %d\n0000000000 65535 f \n" % (len(objects) + 1)
+    out += b"".join(b"%010d 00000 n \n" % offset for offset in offsets)
+    out += b"trailer\n<< /Size %d /Root 1 0 R >>\nstartxref\n%d\n%%%%EOF\n" % (len(objects) + 1, xref)
+    Path(path).write_bytes(bytes(out))
+
+
+OWN_CV = ["Rowan Example", "Exhibit coordinator | rowan@example.org", "Experience",
+          "Visitor Programs Assistant, Paper Harbor Museum, 2021 to 2024",
+          "- Redesigned exhibit wayfinding and tested signage with visitors.",
+          "- Trained volunteers on a handover checklist.", "Skills",
+          "Visitor research, plain language signage and volunteer training."]
+
+
+def fixture(root, with_cv=True, inspect_pages=None, own_cv=False):
+    """own_cv=True attaches a CV the candidate supplied (their own design) instead of one built here."""
     root = core.workspace(root, initialized=False)
     core.init(root, demo=True)
     folder = root / "roles" / ROLE
@@ -44,7 +71,7 @@ def fixture(root, with_cv=True, inspect_pages=None):
         "coverage": "complete", "required_fields": ["Name", "Available for weekend shifts?"],
         "letter_mode": "none",
         "attachments": {"cv": {"required": True, "slot": "CV", "extensions": [".pdf"],
-                                "max_bytes": 2_000_000}} if with_cv else {}
+                                "max_bytes": 2_000_000}} if with_cv or own_cv else {}
     })
     answers = data("answers.json", {"role_id": ROLE, "fields": [
         {"prompt": "Name", "value": "Rowan Example", "source": "Fictional profile"},
@@ -89,6 +116,16 @@ Visitor research, plain language signage and volunteer training.
                                     for w in built["recovery_warnings"]}}
         if inspect_pages:
             inspect_pages(built)
+    if own_cv:
+        # The candidate's own PDF is attached as is: no build receipt and no visual entry in the review,
+        # only a saved readability check (advisory) bound to these exact bytes.
+        mine = root / "my-cv"
+        mine.mkdir()
+        simple_pdf(mine / "Rowan-Example-CV.pdf", OWN_CV)
+        owncv.review(root, "my-cv/Rowan-Example-CV.pdf", save="my-cv/readability.json")
+        attachments.append({"kind": "cv", "source": "candidate",
+                            "file": core.record(mine / "Rowan-Example-CV.pdf"),
+                            "readability": core.record(mine / "readability.json")})
     package = data("package.json", {
         "schema": 1, "role_id": ROLE, "job": registered["job"], "job_description": raw,
         "screen": screen, "inspection": inspection, "destination_url": DESTINATION,

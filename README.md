@@ -48,6 +48,7 @@ The assistant will:
 | "Interview me about my career" / "Let's do my most recent role" | A 20-minute guided interview, one role at a time ([career-interview](skills/career-interview/SKILL.md)) |
 | "Is this a good fit?" plus a job link or text | Verdict, what's strong, what's thin, two or three questions ([job-screen](skills/job-screen/SKILL.md)) |
 | "Tailor my CV for this role" | A tailored CV and a checked PDF, with a summary of changes and interview talking points ([job-prepare](skills/job-prepare/SKILL.md)) |
+| "I'd rather keep my own CV design" | Feedback on whether application systems can read your PDF and how strong the content is; you make any changes in your own tool, and it's never edited for you |
 | "Find roles that match my criteria" | Searches the sources you approved and registers new postings ([job-discover](skills/job-discover/SKILL.md)) |
 | "Check for new jobs every morning" | After a first search together, a daily run on your computer that leaves a short summary ([job-autopilot](skills/job-autopilot/SKILL.md)) |
 | "Check this application before I send it" | An independent review in a fresh context ([job-review](skills/job-review/SKILL.md)) |
@@ -60,6 +61,7 @@ The assistant will:
 Documents/Job Search/
   profile.md              who you are, your career track, what to keep private
   master-cv.md            your master CV (never edited when tailoring)
+  my-cv/                  or, if you prefer, your own designed CV PDF (never changed)
   career-story.md         the narrative that connects your roles
   experience/             one file per role: context, achievements, stories, lessons
   open-questions.md       gaps the assistant will ask about over time

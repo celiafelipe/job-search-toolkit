@@ -32,6 +32,7 @@ Ask in plain words, one or two questions at a time:
 3. **What it may do.** The default is: find, screen and write a short summary. It never applies, messages anyone or changes anything on a job board.
    - Setup never turns on automatic applications, even if a scoped grant already exists in `policy.json` ([the application guide](../../docs/APPLY.md)). Adding `apply` is a later decision the candidate makes after reviewing at least one digest, so the check run in step 5 can never send an application.
 4. **The summary.** How many roles at most, and whether a quiet day should be one line.
+5. **Their own CV** (only if `profile.md` says `CV choice: own` and `apply` may later be allowed): should applications use one fixed CV every time, or do they want to adjust it for each job first? Record it under "CV" in `autopilot.md`.
 
 ### 3. Write `autopilot.md`
 
@@ -57,12 +58,14 @@ Nobody is watching. Ask no questions. Anything that needs the candidate becomes 
 3. **Take the workspace lease.** Choose a run ID such as `autopilot-2030-01-15T0700` and run `lock <run ID>`. If another owner holds the lease, stop: report "a previous run still holds the lease" as an exception, with its run ID and start time from `tracker`, so the next attended session can recover it ([job-search](../job-search/SKILL.md#on-every-session)). Never clear it yourself; clearing needs evidence ([one execution owner](../../docs/APPLY.md#one-execution-owner)).
 4. **Discover and screen.** Follow [job-discover](../job-discover/SKILL.md), which reads `discovery/sources.md`, limited to the sources `autopilot.md` says to check today. A login page, CAPTCHA or access block ends that source for today; it is an exception, not a reason to stop the run.
 5. **Apply, only if allowed.** Skip this step unless `autopilot.md` lists `apply` under allowed actions **and** `policy.json` holds a scoped grant that is unexpired and valid for its selection mode, as [the application guide](../../docs/APPLY.md) describes (for `eligible_roles`, it must still match the current `rubric.md` and `search-preferences.md`). Then follow the full pipeline in [job-search](../job-search/SKILL.md#full-pipeline-when-asked) and [the application guide](../../docs/APPLY.md), within the per-run cap. Preparation and review must each run in a fresh separate context; if the host can't provide that, stop after preparation and list the role as awaiting review. Any sensitive question, new fact or mismatch holds that role as an exception.
+   - **Their own CV.** With a fixed CV, attach the file named in `autopilot.md` as is, with its current `review-cv` report. If they adjust it per job, never send the old version and never edit it yourself: after preparation, write `cv-suggestions.md` ([job-prepare](../job-prepare/SKILL.md#if-they-use-their-own-cv)), add a dated line `waiting for your updated CV (since YYYY-MM-DD)` to `roles/<role-id>/notes.md`, and list the role under **Needs you** as "waiting for your updated CV" with the suggestions file path. This is a hold, not a failure.
+   - **Resume held roles.** At the start of this step, check roles with that line. If a new PDF has appeared in `roles/<role-id>/my-cv/` since the hold, run `review-cv --save` on it, replace the line with `updated CV received YYYY-MM-DD`, and carry on with review and the rest of the pipeline as usual. If nothing has arrived, keep holding and mention it again in the digest.
 6. **Release the lease** with `unlock <run ID>`, even when sources failed.
 7. **Digest.** Reply with a short summary, which the host keeps in the task's history:
    - First line: coverage (**complete**, **partial** or **failed**), the number of new roles, and the inbox path ([run report](../job-discover/references/state-and-inbox.md#run-report)).
    - Saved roles and the top roles worth a look, each with a link, score and one-line reason, within the cap in `autopilot.md`.
    - Applications sent (only under a grant), with their recorded outcome.
-   - **Needs you:** logins, CAPTCHAs, uncertain applications, conflicts to review, and proposed changes to sources or criteria.
+   - **Needs you:** logins, CAPTCHAs, roles waiting for your updated CV, uncertain applications, conflicts to review, and proposed changes to sources or criteria.
 
    A quiet, fully covered day is one line.
 

@@ -1,6 +1,6 @@
 """Bind a reviewed package to its exact files, answers and observed form."""
 from .core import checked, inside, instant, read, record, require, text, url
-from . import pdf
+from . import owncv, pdf
 
 FIELDS = ("prompt", "value", "source")
 
@@ -68,10 +68,13 @@ def verified_package(root, package):
         if max_chars is not None:
             require(type(max_chars) is int and 0 < len(letters[0]["value"]) <= max_chars,
                     "Letter exceeds observed character limit")
-    builds = {}
+    builds, supplied = {}, {}
     for attachment in plan["attachments"]:
         kind = attachment["kind"]
-        require(kind in limits and kind not in builds, "Unexpected or duplicate attachment")
+        require(kind in limits and kind not in builds and kind not in supplied,
+                "Unexpected or duplicate attachment")
+        source = attachment.get("source", "generated")
+        require(source in ("generated", "candidate"), "Attachment source must be generated or candidate")
         path = checked(root, attachment["file"])
         require(path.suffix.lower() == ".pdf", "Only reviewed PDFs are supported")
         allowed = limits[kind].get("extensions")
@@ -82,9 +85,18 @@ def verified_package(root, package):
             require(type(max_bytes) is int and 0 < path.stat().st_size <= max_bytes,
                     "PDF exceeds observed upload size limit")
         text(limits[kind]["slot"], "observed attachment field label")
+        if source == "candidate":
+            # The candidate's own design: never rebuilt or edited, so there is no build receipt or visual
+            # review. It must have a saved readability check of these exact bytes; its findings are advisory.
+            require(kind == "cv", "Only the CV can be the candidate's own file; letters are built here")
+            require("build" not in attachment, "A candidate-supplied CV has no build receipt")
+            supplied[kind] = owncv.verify(root, checked(root, attachment["readability"]), path)
+            continue
+        require(attachment.get("build"), "A PDF built here needs its build receipt; for the candidate's own "
+                                         "CV use \"source\": \"candidate\" with a review-cv report")
         receipt = pdf.verify(root, checked(root, attachment["build"]), path, kind)
         builds[kind] = receipt
-    require({kind for kind in limits if limits[kind]["required"]} <= set(builds),
+    require({kind for kind in limits if limits[kind]["required"]} <= set(builds) | set(supplied),
             "Required attachment is missing")
     if letter_mode == "pdf_required":
         require("letter" in builds, "Required letter PDF is missing")
@@ -111,7 +123,8 @@ def gate(root, package_file, review_file, final=False):
             "Independent assessment cannot be the preparer's evidence map")
     checked(root, review["review_notes"])
     visual = review["visual"]
-    require(set(visual) == set(builds), "Visual review must cover every PDF")
+    require(set(visual) == set(builds),
+            "Visual review must cover every PDF built here (and none for the candidate's own CV)")
     for kind, receipt in builds.items():
         item = visual[kind]
         require(item["pdf_sha256"] == receipt["files"]["document.pdf"]["sha256"]

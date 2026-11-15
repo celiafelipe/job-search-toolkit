@@ -50,19 +50,30 @@ Ask for whatever is easiest, in this order of preference. Any one of these is en
 
 Read every source fully. To get the text of a Word or PDF file, run `python3 -m toolkit --workspace "<workspace>" extract-text "sources/<file>"` (it handles `.docx`, `.pdf`, `.txt` and `.md`; ask them to re-save `.doc` or `.pages` files as `.docx` or PDF). If a file cannot be read, say so rather than guessing at its contents.
 
-## 4. Build their career files
+## 4. Our template or their own CV
+
+Ask once, in plain words: "Would you like me to write and tailor your CV in a clean, simple format, or do you prefer to keep your own design (from Word, Canva, Pages...) and edit it yourself?" Both are fine; record the answer as `CV choice` in `profile.md`, and tell them they can switch later.
+
+- **Our template:** carry on with step 5 as written.
+- **Their own CV:** ask for the PDF exactly as they would send it to an employer and save it unchanged in `my-cv/` (for example `my-cv/Firstname-Lastname-CV.pdf`). Never edit, convert or re-export it. Run `python3 -m toolkit --workspace "<workspace>" review-cv "my-cv/<file>.pdf" --save my-cv/readability.json` and share the feedback in two short parts, most important first:
+  - **Can a computer read it?** Many employers' application systems read the text out of the PDF before a person sees it. Explain each `readability` finding plainly ("your email is inside the header graphic, so the system may not see it") with the fix they could make in their own tool.
+  - **Content.** The `content` warnings, plus your own read against [the CV craft guide](../job-prepare/references/cv-craft.md): vague bullets, results without numbers, claims you can't find in their sources.
+
+  It's advice, not a test: they decide what to change. If they edit it, they send you the new PDF; save it in `my-cv/` and run `review-cv --save` again. Skip writing `master-cv.md` in step 5 (`lint` then checks `my-cv/` instead), but still build the experience files: screening, tailoring suggestions and the review all rely on them.
+
+## 5. Build their career files
 
 From the sources, create:
 
 - **`experience/YYYY-organization.md`**, one per role, from `experience/_role-template.md`. Fill only what the sources state. Add a provenance line such as `- 2030-01-15 | CV import (sources/cv.docx) | unconfirmed | all roles and bullets` (format in [the learning loop](../../docs/LEARNING-LOOP.md#provenance-lines)).
 - **`experience/INDEX.md`**: one row per role with a depth rating. Most roles start as `thin`.
-- **`master-cv.md`** in the supported format (headings, paragraphs, dash lists, `**bold**`), following [the CV craft guide](../job-prepare/references/cv-craft.md). Keep their content faithfully: the facts, numbers, roles and claims are theirs, and this is their master copy, not a tailored version. Style is not content, so do adapt it to [the CV craft guide](../job-prepare/references/cv-craft.md): section headings for their career track (their "Profile" becomes "Executive summary" for an executive), no em dashes, no first person, and no self-labels or AI-sounding words ("passionate", "data-driven", "spearheaded"). Keep their own phrasing wherever it already fits these rules, and show them every line you restyled in step 4's summary. For the executive track, add an executive summary and key achievements built only from what the sources state. The CV itself can't hold review notes (anything you add would end up in the PDF), so list every line you drafted rather than transcribed under a "Master CV: to review" heading in `open-questions.md`, and walk them through it in step 4's summary. Then run `python3 -m toolkit --workspace "<workspace>" check-cv master-cv.md` to confirm the format is supported. Never edit their original file in `sources/`.
+- **`master-cv.md`** (only if they chose our template) in the supported format (headings, paragraphs, dash lists, `**bold**`), following [the CV craft guide](../job-prepare/references/cv-craft.md). Keep their content faithfully: the facts, numbers, roles and claims are theirs, and this is their master copy, not a tailored version. Style is not content, so do adapt it to [the CV craft guide](../job-prepare/references/cv-craft.md): section headings for their career track (their "Profile" becomes "Executive summary" for an executive), no em dashes, no first person, and no self-labels or AI-sounding words ("passionate", "data-driven", "spearheaded"). Keep their own phrasing wherever it already fits these rules, and show them every line you restyled in this step's summary. For the executive track, add an executive summary and key achievements built only from what the sources state. The CV itself can't hold review notes (anything you add would end up in the PDF), so list every line you drafted rather than transcribed under a "Master CV: to review" heading in `open-questions.md`, and walk them through it in this step's summary. Then run `python3 -m toolkit --workspace "<workspace>" check-cv master-cv.md` to confirm the format is supported. Never edit their original file in `sources/`.
 - **`profile.md`**: name, contact details, languages, and the career track (`executive`, `senior` or `standard`), inferred from titles and scope and then confirmed with them.
 - **`career-story.md`**: a short draft of their positioning and career arc, clearly marked as a draft for them to react to.
 
 Then show a short summary: the roles found, the dates, and anything that looked inconsistent (overlapping dates, missing years, titles that differ between the CV and LinkedIn). Ask them to confirm or correct it. Record their corrections.
 
-## 5. Five questions about what they want
+## 6. Five questions about what they want
 
 Ask one or two at a time, conversationally. Do not present the template.
 
@@ -74,7 +85,7 @@ Ask one or two at a time, conversationally. Do not present the template.
 
 Write `search-preferences.md`. Draft `rubric.md` from its template: hard gates (no weight), weighted criteria totalling 100, the scoring scale, and pursue/hold/skip thresholds, show it to them in plain words ("I'd score a role mostly on X and Y; a role in Z would be a hard no"), and adjust it until they agree. The rubric is theirs, not yours.
 
-## 6. Show what's strong and what's thin
+## 7. Show what's strong and what's thin
 
 First run `python3 -m toolkit --workspace "<workspace>" lint` and fix anything it reports (rubric weights, INDEX rows, provenance lines). Then give a short health check:
 
@@ -82,7 +93,7 @@ First run `python3 -m toolkit --workspace "<workspace>" lint` and fix anything i
 - Which roles are `thin` and why that matters, e.g. "your most recent role has no numbers yet, and that's the one recruiters read first".
 - Add the most valuable gaps to `open-questions.md`. Do not ask them all now.
 
-## 7. Offer the next step
+## 8. Offer the next step
 
 Offer two paths and let them choose:
 

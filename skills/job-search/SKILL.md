@@ -27,6 +27,7 @@ These apply in every skill of this toolkit, whether or not the skill repeats the
 | Wants discovery to run every day, or a scheduled "daily run" | [job-autopilot](../job-autopilot/SKILL.md) |
 | Shares a job and asks if it fits | [job-screen](../job-screen/SKILL.md) |
 | Wants a tailored CV, cover letter or answers | [job-prepare](../job-prepare/SKILL.md) |
+| Has their own designed CV and wants feedback on it | `review-cv` and the own-CV steps in [job-starter](../job-starter/SKILL.md#4-our-template-or-their-own-cv) |
 | A package needs checking before sending | [job-review](../job-review/SKILL.md), in a fresh separate context |
 | Wants the toolkit to fill in or submit a form | [job-apply](../job-apply/SKILL.md), only with explicit permission |
 | Applied already, or asks about status | [job-track](../job-track/SKILL.md) |

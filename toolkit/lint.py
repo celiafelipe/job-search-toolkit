@@ -2,13 +2,14 @@
 import json
 import re
 
-from . import pdf
+from . import core, pdf
 
 DATE_LINE = re.compile(r"^\s*-?\s*`?\d{4}-\d{2}-\d{2}")
 SCREEN_KEYS = {"role_id", "score", "verdict", "hard_gaps", "unknowns", "rationale"}
 RATIONALE_KEYS = {"criteria", "role_evidence", "candidate_evidence", "user_override"}
 DEPTHS = {"thin", "ok", "rich"}
 FIRST_PERSON = re.compile(r"\b(I|me|my)\b")
+OWN_CV = re.compile(r"(?im)^\s*-\s*CV choice:\s*`?own`?(?![\w-])")
 
 
 PLACEHOLDERS = ("Candidate Name", "Professional headline", "email@example.org", "linkedin profile URL",
@@ -17,8 +18,10 @@ STYLE_WORDS = re.compile(r"\b(spearheaded|leveraged|synergies|passionate|data-dr
                          r"results-oriented|results-driven|dynamic)\b", re.I)
 
 
-def cv_warnings(text, name="CV"):
-    """Cheap craft checks: format can be fine while the content is still a template or breaks the style rules."""
+def cv_warnings(text, name="CV", markdown=True):
+    """Cheap craft checks: format can be fine while the content is still a template or breaks the style rules.
+
+    markdown=False is for text read out of a finished PDF, where the source line-length rule does not apply."""
     warnings = []
     found = [p for p in PLACEHOLDERS if p in text]
     if found:
@@ -31,7 +34,7 @@ def cv_warnings(text, name="CV"):
     if words:
         warnings.append(f"{name}: self-labels or AI-sounding words ({', '.join(words)}); let the bullets prove it")
     lines = [line for line in text.splitlines() if line.strip()]
-    if len(lines) > 1 and not lines[1].startswith("#") and len(lines[1]) > 95:
+    if markdown and len(lines) > 1 and not lines[1].startswith("#") and len(lines[1]) > 95:
         warnings.append(f"{name}: the header line is {len(lines[1])} characters and will wrap; keep it under 95")
     return warnings
 
@@ -96,8 +99,25 @@ def run(root):
         if name not in files:
             errors.append(f"experience/INDEX.md lists {name}, but the file does not exist")
 
+    profile = root / "profile.md"
+    own = profile.is_file() and OWN_CV.search(profile.read_text(encoding="utf-8"))
+    if own:
+        # Their own designed PDF replaces master-cv.md; it is never parsed or edited, only checked by review-cv.
+        pdfs = sorted((root / "my-cv").glob("*.pdf"))
+        if not pdfs:
+            warnings.append("profile.md says they use their own CV, but my-cv/ has no PDF yet")
+        reports = set()
+        for report in (root / "my-cv").glob("*.json"):
+            try:
+                data = json.loads(report.read_text(encoding="utf-8"))
+                reports.add(data["cv"]["sha256"] if data.get("kind") == "candidate_cv_check" else None)
+            except (ValueError, KeyError, TypeError):
+                pass
+        for path in pdfs:
+            if core.digest(path) not in reports:
+                warnings.append(f"my-cv/{path.name} has no saved review-cv report for its current version")
     master = root / "master-cv.md"
-    if master.is_file():
+    if master.is_file() and not own:
         text = master.read_text(encoding="utf-8")
         try:
             pdf.parse(text)
