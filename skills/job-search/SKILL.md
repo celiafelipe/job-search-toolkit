@@ -28,6 +28,7 @@ These apply in every skill of this toolkit, whether or not the skill repeats the
 | Shares a job and asks if it fits | [job-screen](../job-screen/SKILL.md) |
 | Wants a tailored CV, cover letter or answers | [job-prepare](../job-prepare/SKILL.md) |
 | Has their own designed CV and wants feedback on it | `review-cv` and the own-CV steps in [job-starter](../job-starter/SKILL.md#4-our-template-or-their-own-cv) |
+| A package is ready and the candidate hasn't said how they'll send it | Offer [job-review](../job-review/SKILL.md), then [job-apply](../job-apply/SKILL.md), or they send it themselves |
 | A package needs checking before sending | [job-review](../job-review/SKILL.md), in a fresh separate context |
 | Wants the toolkit to fill in or submit a form | [job-apply](../job-apply/SKILL.md), only with explicit permission |
 | Applied already, or asks about status | [job-track](../job-track/SKILL.md) |
@@ -45,7 +46,7 @@ A request for one stage ends at that stage unless they ask for more.
 
 1. Discover and screen. Rank eligible roles by objective score, and note roles the candidate prioritized separately.
 2. For the chosen roles, inspect the application form read-only ([job-apply](../job-apply/SKILL.md)), then prepare the package in a fresh context and review it in a different fresh context.
-3. By default, stop at a ready-to-send package for the candidate. Submission requires their explicit permission and the checks in [the application guide](../../docs/APPLY.md).
+3. Stop at a ready-to-send package and ask how they want to send it: themselves, or independent check then submission by you. Submission requires their explicit permission and the checks in [the application guide](../../docs/APPLY.md).
 4. Record outcomes with [job-track](../job-track/SKILL.md).
 
 ## Report back

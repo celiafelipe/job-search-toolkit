@@ -9,11 +9,11 @@ Get a new person from zero to a useful setup in about 20 minutes, without asking
 
 ## 0. Welcome and promises
 
-Introduce the toolkit in two or three sentences, and make these promises:
+Introduce the toolkit in two or three sentences, and make these promises. First, in two lines, say what the toolkit can do: find roles, screen them, tailor the CV, check it independently, submit applications only when they switch that on, track them, and run the search every morning.
 
 - Their information stays in a private folder on their computer.
 - You never invent experience, numbers or answers. You ask, and you only use what they confirm.
-- Nothing is sent to any employer without their explicit permission for that specific application.
+- Nothing is sent to any employer without their explicit permission for that specific application. That is a guarantee on a feature, not a reason to hide it.
 
 Tell them the setup gets them started quickly, and that their career file improves every time you discuss a job together. They do not need to write everything down up front.
 
@@ -85,6 +85,8 @@ Ask one or two at a time, conversationally. Do not present the template.
 
 Write `search-preferences.md`. Draft `rubric.md` from its template: hard gates (no weight), weighted criteria totalling 100, the scoring scale, and pursue/hold/skip thresholds, show it to them in plain words ("I'd score a role mostly on X and Y; a role in Z would be a hard no"), and adjust it until they agree. The rubric is theirs, not yours.
 
+Then ask one more question: "When a role is worth it, do you want to send applications yourself, have me prepare and submit each one after your OK, or (later) let me apply automatically within rules you set?" Record the answer in `profile.md` as `Application handling` (`self`, `ask-each` or `automatic-later`). Do not change `policy.json` now; that happens on the first real role, as described in [the application guide](../../docs/APPLY.md). Offering to review or submit an application is always fine and expected; only switching it on and each actual send need the candidate's explicit decision.
+
 ## 7. Show what's strong and what's thin
 
 First run `python3 -m toolkit --workspace "<workspace>" lint` and fix anything it reports (rubric weights, INDEX rows, provenance lines). Then give a short health check:
@@ -102,10 +104,12 @@ Offer two paths and let them choose:
 
 Mention in one line that once they've approved some job sources and tried a search together, you can run it every morning for them ([job-autopilot](../job-autopilot/SKILL.md)). Don't set up a schedule now.
 
+Mention in one line that once a CV is tailored for a role, you can check it independently ([job-review](../job-review/SKILL.md)) and submit it for them with their OK ([job-apply](../job-apply/SKILL.md)).
+
 ## Rules
 
 - The core rules in [job-search](../job-search/SKILL.md#core-rules) apply here too.
 
 - Never ask them to run commands or edit JSON. If an action needs their computer password (for example installing software), explain why and let them run that one step.
-- Do not import another candidate's files or policies. The default application policy is preparation only; changing it is a separate, explicit decision covered in [the application guide](../../docs/APPLY.md).
+- Do not import another candidate's files or policies. Applying is off by default. Tell the candidate it exists; switching it on is their explicit decision ([the application guide](../../docs/APPLY.md)).
 - Do not put any of their data inside the toolkit folder or a Git repository.

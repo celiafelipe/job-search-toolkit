@@ -43,6 +43,11 @@ When `profile.md` says `CV choice: own`, steps 1, 2 and 4 to 6 stay the same, bu
 
 ## Hand off
 
-For an actual submission, hand the package to an independent reviewer ([job-review](../job-review/SKILL.md)) in a separate fresh context. If the candidate will submit it themselves, they can use the PDF directly. Remind them the toolkit can record the application once they've sent it ([job-track](../job-track/SKILL.md)).
+Ask the candidate: "Your CV is ready. Do you want to send it yourself, or should I run an independent check and then submit it with your approval?" Pre-select the answer from `Application handling` in `profile.md`.
 
-Stay offline in this stage: no form entry, uploads or applications, and no policy or tracker changes.
+- **Check and submit:** hand the package to an independent reviewer ([job-review](../job-review/SKILL.md)) in a separate fresh context, then [job-apply](../job-apply/SKILL.md).
+- **They send it themselves:** they can use the PDF directly. Remind them the toolkit can record the application once they've sent it ([job-track](../job-track/SKILL.md)).
+
+Offering to review or submit an application is always fine and expected; only switching it on and each actual send need the candidate's explicit decision.
+
+This stage itself stays offline: no form entry, uploads, applications, or policy or tracker changes. Offering the next stages is expected.

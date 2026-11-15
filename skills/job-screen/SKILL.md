@@ -27,7 +27,7 @@ If the rubric is missing, give a provisional qualitative view and offer to set u
 2. **What's strong for this role:** two to four specific matches from their experience.
 3. **What's thin or missing:** the important gaps, and whether each is a dealbreaker or just unproven.
 4. **Two or three questions** that would most strengthen this application, following [the learning loop](../../docs/LEARNING-LOOP.md), plus once: "Anything else relevant I might not know about?"
-5. **Next step:** for pursue, offer to tailor the CV ([job-prepare](../job-prepare/SKILL.md)).
+5. **Next step:** for pursue, show the whole path in one line: tailor the CV ([job-prepare](../job-prepare/SKILL.md)), an independent check ([job-review](../job-review/SKILL.md)), then they send it or you submit it with their OK ([job-apply](../job-apply/SKILL.md)), then record it ([job-track](../job-track/SKILL.md)). Phrase it using `Application handling` from `profile.md` (for `self`, leave out the submit part and say you can still run the check).
 
 When they answer, record the confirmed facts in the experience files as the learning loop describes, then update the assessment if it changes.
 
