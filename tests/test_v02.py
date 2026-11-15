@@ -252,6 +252,16 @@ class FourthReport(unittest.TestCase):
                          "pursue, hold or skip", "does not match its folder"):
             self.assertIn(expected, errors)
 
+    def test_lint_depth_qualifier_points_to_notes_column(self):
+        from toolkit import lint
+        (self.root / "experience" / "INDEX.md").write_text(
+            "| File | Role | Organization | Dates | Depth | Career interview | Last updated | Notes |\n"
+            "| --- | --- | --- | --- | --- | --- | --- | --- |\n"
+            "| 2020-orgco.md | VP | Orgco | 2020 | thin (imported) | not started | | |\n", encoding="utf-8")
+        errors = " ".join(lint.run(self.root)["errors"])
+        self.assertIn("exactly thin, ok or rich", errors)
+        self.assertIn("Notes column", errors)
+
     def test_letter_paper_survives_verification_html(self):
         source = "# Sam Doe\n"
         self.assertNotEqual(pdf.html(pdf.parse(source), "letter"), pdf.html(pdf.parse(source)))

@@ -9,7 +9,9 @@ The toolkit root is two levels above this skill's folder (it contains `toolkit/`
 
 ## Inputs
 
-Read the job posting (full text; if they gave a link, read it), `search-preferences.md`, `rubric.md`, `profile.md`, `experience/INDEX.md` and the relevant experience files. If the workspace doesn't exist, start [job-starter](../job-starter/SKILL.md) first. For a posting that isn't registered yet, register it as described in [job-discover](../job-discover/SKILL.md) when they want to track it. A quick verdict doesn't require registration.
+Read the job posting (full text; if they gave a link, read it), `search-preferences.md`, `rubric.md`, `profile.md`, `experience/INDEX.md` and the relevant experience files. If the workspace doesn't exist, start [job-starter](../job-starter/SKILL.md) first.
+
+If the posting is a LinkedIn link, or the page only gives you a summary or partial text, ask the candidate to paste the full posting text, or read it through their own browser if you have one with their sign-in. Never screen or save `job-description.txt` from a summary without telling the candidate clearly, and note in the role files that the text was a summary.
 
 If the rubric is missing, give a provisional qualitative view and offer to set up criteria. Don't present a numeric score.
 
@@ -33,4 +35,4 @@ When they answer, record the confirmed facts in the experience files as the lear
 
 ## Record
 
-If the role is registered, save `roles/<role-id>/screen.json` following [the contract](../../docs/WORKFLOW.md#1-intake-and-screening): `role_id`, `score`, `verdict`, `hard_gaps`, `unknowns`, `rationale` (an object; its keys are defined in the contract). Reassess when the posting, rubric or their answers change. Screening never authorizes an application.
+If the role is already registered, always save the current assessment to `roles/<role-id>/screen.json`, whatever the verdict, so a changed score or verdict never leaves an old one behind. If it isn't registered yet: on a pursue verdict, register it as described in [job-discover](../job-discover/SKILL.md) (its intake steps), save `screen.json`, and tell the candidate in one line that you did; for hold or skip, offer once to save it, and if they agree, register and save the same way. Follow [the contract](../../docs/WORKFLOW.md#1-intake-and-screening) for `screen.json`: `role_id`, `score`, `verdict`, `hard_gaps`, `unknowns`, `rationale` (an object; its keys are defined in the contract). Reassess when the posting, rubric or their answers change. Screening never authorizes an application.

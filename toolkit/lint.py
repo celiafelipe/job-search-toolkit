@@ -84,7 +84,7 @@ def run(root):
                 continue
             listed.append(row[0].strip("`"))
             if len(row) >= 5 and row[4] and row[4] not in DEPTHS:
-                errors.append(f"experience/INDEX.md: depth '{row[4]}' for {row[0]} must be thin, ok or rich")
+                errors.append(f"experience/INDEX.md: depth '{row[4]}' for {row[0]} must be exactly thin, ok or rich (put any qualifier in the Notes column)")
             if len(row) >= 6 and row[5] and not re.match(r"^(not started|in progress|done \d{4}-\d{2}-\d{2})",
                                                          row[5]):
                 warnings.append(f"experience/INDEX.md: career interview '{row[5]}' for {row[0]} is not "

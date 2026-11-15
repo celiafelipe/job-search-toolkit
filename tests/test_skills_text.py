@@ -26,5 +26,14 @@ class DiscoverabilityTests(unittest.TestCase):
         self.assertIn("Application handling", read("templates/profile.md"))
 
 
+class ScreenRecordTests(unittest.TestCase):
+    def test_registered_roles_always_save_the_current_screen(self):
+        text = read("skills/job-screen/SKILL.md")
+        section = text[text.index("## Record"):]
+        self.assertIn("already registered, always save", section)
+        # The offer to save applies only to roles that aren't registered yet.
+        self.assertLess(section.index("isn't registered yet"), section.index("offer once"))
+
+
 if __name__ == "__main__":
     unittest.main()
