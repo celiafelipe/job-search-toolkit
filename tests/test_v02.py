@@ -79,6 +79,48 @@ class BetaFindings(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "already exists"):
                 core.init(root, demo=False)
 
+    def test_init_ignores_hidden_entries_only(self):
+        with tempfile.TemporaryDirectory() as temp:
+            hidden = Path(temp) / "hidden"
+            (hidden / ".claude").mkdir(parents=True)
+            (hidden / ".claude" / "settings.local.json").write_text("{}", encoding="utf-8")
+            (hidden / ".DS_Store").write_text("", encoding="utf-8")
+            core.init(core.workspace(hidden, initialized=False), demo=False)
+            self.assertTrue((hidden / "ledger.json").exists())
+            visible = Path(temp) / "visible"
+            visible.mkdir()
+            (visible / "notes.txt").write_text("x", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "already contains files"):
+                core.init(core.workspace(visible, initialized=False), demo=False)
+
+    def test_licence_hint_on_macos_without_poppler(self):
+        from unittest import mock
+        runtime = {"browser": "/b", "pdfinfo": None, "pdftotext": None, "pdftoppm": None}
+        with mock.patch("sys.platform", "darwin"), mock.patch.object(pdf, "find_tool", return_value="/brew"):
+            hints = pdf.install_hints(runtime, licence_check=lambda: True)
+            self.assertTrue(any("xcodebuild -license accept" in h for h in hints))
+            hints = pdf.install_hints(runtime, licence_check=lambda: False)
+            self.assertFalse(any("xcodebuild" in h for h in hints))
+
+    def test_licence_check_uses_exit_code_and_survives_missing_tool(self):
+        from unittest import mock
+        fake = lambda code: (lambda *a, **k: mock.Mock(returncode=code))
+        with mock.patch("shutil.which", return_value="/usr/bin/xcodebuild"):
+            self.assertTrue(pdf.xcode_licence_pending(runner=fake(69)))
+            self.assertFalse(pdf.xcode_licence_pending(runner=fake(0)))
+        with mock.patch("shutil.which", return_value=None):
+            self.assertFalse(pdf.xcode_licence_pending(runner=fake(69)))
+
+    def test_pdf_source_without_poppler_explains(self):
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as temp:
+            root = core.workspace(Path(temp) / "ws", initialized=False)
+            core.init(root, demo=False)
+            (root / "sources" / "a.pdf").write_bytes(b"%PDF-1.4")
+            with mock.patch.object(pdf, "find_tool", return_value=None):
+                with self.assertRaisesRegex(ValueError, "Poppler.*not installed.*doctor"):
+                    pdf.extract_text(root, "sources/a.pdf")
+
     def test_timeout_message_suggests_fix(self):
         with self.assertRaisesRegex(ValueError, "JOBKIT_CHROME"):
             pdf.run([sys.executable, "-c", "import time; time.sleep(5)"], timeout=0.5)

@@ -50,7 +50,19 @@ def find_tool(name):
                                       if (Path(folder) / name).is_file()), None)
 
 
-def install_hints(runtime):
+def xcode_licence_pending(runner=subprocess.run):
+    """True when macOS says the Xcode / Command Line Tools licence is not accepted yet (never prompts)."""
+    tool = shutil.which("xcodebuild")
+    if not tool:
+        return False
+    try:
+        return runner([tool, "-license", "check"], capture_output=True, timeout=10,
+                      stdin=subprocess.DEVNULL).returncode != 0
+    except (OSError, subprocess.SubprocessError):
+        return False
+
+
+def install_hints(runtime, licence_check=xcode_licence_pending):
     """Plain-language fixes an agent can offer (with the user's permission) for missing tools."""
     hints = []
     if not runtime["browser"]:
@@ -69,6 +81,12 @@ def install_hints(runtime):
                          "Homebrew exists). The toolkit finds Homebrew's tools even if the 'add to PATH' step "
                          "was skipped.")
         else:
+            if sys.platform == "darwin" and licence_check():
+                hints.append("Before installing Poppler, this Mac needs Apple's developer licence accepted, "
+                             "otherwise 'brew install poppler' can appear to succeed but install nothing. The "
+                             "candidate runs 'sudo xcodebuild -license accept' in the Terminal app themselves "
+                             "(it asks for their Mac password). Then run 'brew install poppler' and re-run doctor "
+                             "to confirm.")
             hints.append("Install Poppler: macOS 'brew install poppler'; Debian/Ubuntu "
                          "'sudo apt-get install poppler-utils'; Fedora 'sudo dnf install poppler-utils'.")
     return hints
@@ -269,8 +287,9 @@ def extract_text(root, source):
             lines.append(text)
         return "\n".join(lines).strip() + "\n"
     if suffix == ".pdf":
-        tool = shutil.which("pdftotext")
-        require(tool, "Reading a PDF needs Poppler; run doctor for the install command")
+        tool = find_tool("pdftotext")
+        require(tool, "Cannot read this PDF because Poppler (the free PDF reading tools) is not installed. "
+                      "Run doctor for the install steps, or use a Word or text version of the file")
         return run([tool, "-layout", str(path), "-"])
     require(suffix in (".txt", ".md", ".text"),
             "Supported: .docx, .pdf, .txt, .md. For .doc or .pages, ask the candidate to save as .docx or PDF")

@@ -26,9 +26,9 @@ python3 -m toolkit --workspace "<workspace, default ~/Documents/Job Search>" doc
 ```
 
 - Python 3.9 or newer is enough, so the Python that comes with a Mac works; `doctor` reports `python_ok`. Only if `python3` is missing entirely, help install it (macOS: `xcode-select --install`, which opens Apple's installer; Linux: the package manager).
-- If `pdf_ready` is false, show the `fix` hints from `doctor` in plain words and offer to run the install command for them. Ask permission before installing anything. On a Mac without Homebrew, the candidate has to run Homebrew's installer themselves because it asks for their password: give them the exact steps, then carry on.
+- If `pdf_ready` is false, show the `fix` hints from `doctor` in plain words and offer to run the install command for them. Ask permission before installing anything. After installing, re-run `doctor` to confirm it worked rather than trusting the install command's exit code (on a Mac, an unaccepted Apple licence can make an install look successful while installing nothing; the `fix` hint says how to resolve it). On a Mac without Homebrew, the candidate has to run Homebrew's installer themselves because it asks for their password: give them the exact steps, then carry on.
 - Windows is not supported yet; suggest WSL or a Mac or Linux machine.
-- PDF tools are only needed for the final CV PDF. Setup can continue without them.
+- Poppler (the PDF tools) is needed to read PDF sources, such as a CV or a LinkedIn PDF, and later to make the final CV PDF. If their sources are PDFs, get it installed before step 3. Word or text sources work without it.
 
 ## 2. Create their private folder
 

@@ -127,7 +127,7 @@ def init(root, demo):
     import shutil
     require(not (root / "ledger.json").exists(),
             f"A workspace already exists at {root}; nothing was changed. Use it as is.")
-    require(not root.exists() or not any(root.iterdir()),
+    require(not root.exists() or not any(not p.name.startswith(".") for p in root.iterdir()),
             f"{root} already contains files; choose an empty or new folder for the workspace")
     if not root.parent.exists():
         # A missing Documents folder is a normal, visible folder; only the workspace itself is private.
