@@ -102,14 +102,17 @@ class BetaFindings(unittest.TestCase):
             hints = pdf.install_hints(runtime, licence_check=lambda: False)
             self.assertFalse(any("xcodebuild" in h for h in hints))
 
-    def test_licence_check_uses_exit_code_and_survives_missing_tool(self):
+    def test_licence_check_needs_licence_failure_and_survives_missing_tool(self):
         from unittest import mock
-        fake = lambda code: (lambda *a, **k: mock.Mock(returncode=code))
+        licence = b"You have not agreed to the Xcode license agreements."
+        stub = b"xcode-select: error: tool 'xcodebuild' requires Xcode, but active developer directory is a command line tools instance"
+        fake = lambda code, err=b"": (lambda *a, **k: mock.Mock(returncode=code, stdout=b"", stderr=err))
         with mock.patch("shutil.which", return_value="/usr/bin/xcodebuild"):
-            self.assertTrue(pdf.xcode_licence_pending(runner=fake(69)))
+            self.assertTrue(pdf.xcode_licence_pending(runner=fake(69, licence)))
             self.assertFalse(pdf.xcode_licence_pending(runner=fake(0)))
+            self.assertFalse(pdf.xcode_licence_pending(runner=fake(1, stub)))
         with mock.patch("shutil.which", return_value=None):
-            self.assertFalse(pdf.xcode_licence_pending(runner=fake(69)))
+            self.assertFalse(pdf.xcode_licence_pending(runner=fake(69, licence)))
 
     def test_pdf_source_without_poppler_explains(self):
         from unittest import mock

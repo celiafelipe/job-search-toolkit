@@ -56,10 +56,16 @@ def xcode_licence_pending(runner=subprocess.run):
     if not tool:
         return False
     try:
-        return runner([tool, "-license", "check"], capture_output=True, timeout=10,
-                      stdin=subprocess.DEVNULL).returncode != 0
+        result = runner([tool, "-license", "check"], capture_output=True, timeout=10,
+                        stdin=subprocess.DEVNULL)
     except (OSError, subprocess.SubprocessError):
         return False
+    # With only the Command Line Tools, xcodebuild is a stub that fails with "requires Xcode";
+    # that is not a licence problem, so only a failure that mentions the licence counts.
+    output = (result.stdout or b"") + (result.stderr or b"")
+    if isinstance(output, bytes):
+        output = output.decode("utf-8", "replace")
+    return result.returncode != 0 and "licen" in output.lower()
 
 
 def install_hints(runtime, licence_check=xcode_licence_pending):
