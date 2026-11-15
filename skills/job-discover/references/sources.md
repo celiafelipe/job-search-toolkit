@@ -8,16 +8,17 @@ Every source uses the window and checkpoint rules in [state and inbox](state-and
 
 - Use the browser the candidate approved and check that it is signed in to the account they named (as recorded in `discovery/sources.md`, never guess). If it is not, stop that source and report it. Do not switch to another profile or account.
 - Read pages one at a time. No parallel tabs crawling the same site and no retries against a challenge.
-- A login page, CAPTCHA, verification step or access block ends that source for this run. Never enter credentials or solve a challenge. Record "blocked" and carry on with the next source.
-- Read only. Never save, unsave, hide, apply, message, or change filters, lists or alert settings on the site, unless the candidate approved one specific filter change in `discovery/sources.md` (for example "always set the date filter to the last 7 days").
+- A login page, CAPTCHA, verification step or access block ends that source for this run. So does a "page not found" or an unexpectedly empty page where the same page worked before: signed out, some boards show that instead of a login form. Never enter credentials or solve a challenge. Record "blocked" and carry on with the next source.
+- Read only. Setting the filters of a single search (keyword, location, date, workplace type) is fine. Never save, unsave, hide, apply, message, or change saved alerts, lists, job preferences or account settings on the site, unless the candidate approved one specific change in `discovery/sources.md`.
 
 ## Saved jobs on a job board
 
 1. Open the board's saved-jobs list through its visible menus. Go through every page; note it if you could not reach them all.
-2. Remember saved job IDs in the state. Saved jobs are not limited by posting date.
+   - Some boards move a saved job to another tab once an application starts or the posting closes (for example "In progress", "Applied" or "Archived"). Read every tab that holds saved jobs. If you could only read one, report coverage as partial ("Saved tab only"), not complete.
+2. Remember saved job IDs in the state. Saved jobs are not limited by posting date. A job that moved to another tab is not an unsave.
 3. On the first run, treat every saved job not already in the inbox or tracker as new, and label it "saved before setup" so it isn't presented as a fresh save. After that, handle only jobs saved since the last run. For each such job:
    - Already in the inbox or tracker: list it under today's **Saved by you** with "first seen on <date>" and its existing score. Leave the older inbox block as it is, and don't re-score unchanged evidence.
-   - Already applied: leave it as applied.
+   - Already applied in the tracker: leave it as applied. If the board marks it "Applied" but the tracker has no record, list it under **Possibly already applied** (see below).
    - Previously skipped: list it under **Saved: conflicts to review**, with the earlier reason and the criterion it conflicts with. Never discard the save silently and never override the skip yourself.
 4. A saved job with a gap or conflict still appears in the digest: link, why it could be worth pursuing, the gap, and the decision needed. Mention it once and keep it visible in the inbox. Raise it again only if something material changes.
 5. A save is interest, never permission to apply and never a reason to change the score.
@@ -26,16 +27,16 @@ Every source uses the window and checkpoint rules in [state and inbox](state-and
 
 1. Use the mail tools the host provides. Search for the alert sender recorded in `discovery/sources.md`. Include read and unread mail; leave out notification noise from the same service that is not a job alert.
 2. Go through every page of results for the window.
-3. From each email, take employer, title, location, the posting link and the snippet. Include clearly relevant "similar roles" the email lists.
+3. Read the HTML (full) version of each email: the plain-text version often drops the workplace tag ("Remote", "Hybrid") and the salary. Take only the job cards: employer, title, location with its workplace tag, salary if shown, the posting link and the snippet. Include clearly relevant "similar roles" the email lists. Skip the rest of the email; it costs time and adds nothing.
 4. Strip tracking parameters from saved links. Never store email bodies, cookies or tracking tokens.
 5. Never mark, label, move, archive or delete mail.
 
 ## Live searches on a job board
 
 1. Build the search list from `search-preferences.md`: each target title, each location, as separate searches. Write the list in `discovery/sources.md` so every run uses the same one.
-2. Enter through the board's own search box. Do not trust that a hand-built URL sets the location or date filter. After every search or filter change, check that the visible keyword, location, date filter and result list are what you meant before reading results.
-3. Use the smallest date filter that covers the window. If the board has none small enough, use the next one up and check the visible posting dates. A posting with no visible date is "date unverified", not new.
-4. Read results until relevance clearly drops, then stop that search.
+2. Enter through the board's own search box. Do not trust that a hand-built URL sets the location or date filter. Keyword, location and workplace type (remote, hybrid, on-site) are often separate controls, and the location can carry over from the last search. After every search or filter change, check each visible control and the result list before reading results.
+3. Use the smallest date filter that covers the window. If the board has none small enough, use the next one up and check the visible posting dates. A posting with no visible date is "date unverified": include it if it passes triage, and say the date is unverified, but don't call it new.
+4. Read results until relevance clearly drops, then stop that search. If result cards show no job ID, open a card only for roles that pass triage ([dedupe and screen](state-and-inbox.md#dedupe-and-screen)) and use the fallback key for the rest.
 5. Record each search as `done`, `stopped at relevance cutoff`, `failed` or `not attempted`. One failed search makes live search coverage partial for this run.
 
 ## Other boards and career pages

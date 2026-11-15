@@ -21,20 +21,20 @@ Use the same names as `discovery/state.json`. Remove the lines that don't apply.
 
 ## Live searches
 
-One search per title and location. Date filter: the smallest one that covers the window.
+One search per title and location. Date filter: the smallest one that covers the window. Put remote or hybrid in the workplace column, not in the location: boards usually treat them as a separate filter.
 
-| Title | Location |
-| --- | --- |
-| VP Product | Remote, Europe |
-| Head of Product | Example City |
+| Title | Location | Workplace filter |
+| --- | --- | --- |
+| VP Product | Europe | Remote |
+| Head of Product | Example City | Any |
 
 ## Career pages
 
 - [Fictional Employer careers](https://careers.example/jobs)
 
-## Approved filter changes
+## Approved changes on the site
 
-None. (Example of an approved change: "On the matches page, always select Last 7 days.")
+None. Filters on a single search are always fine; anything that stays on the site (saved alerts, job preferences, a matches page setting) needs the candidate's approval here. (Example: "On the matches page, always select Last 7 days.")
 
 ## Source trials
 
