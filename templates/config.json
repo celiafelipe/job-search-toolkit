@@ -9,5 +9,6 @@
   "rubric": "rubric.md",
   "answer_policy": "answer-policy.md",
   "policy": "policy.json",
-  "roles_directory": "roles"
+  "roles_directory": "roles",
+  "cv_style": "cv-style.json"
 }

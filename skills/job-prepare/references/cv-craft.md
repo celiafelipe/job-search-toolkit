@@ -12,9 +12,20 @@ The candidate should be able to read the tailored CV five minutes before an inte
 2. **Executive summary** (executive and senior tracks), or a short profile: three or four lines.
 3. **Key achievements** (executive track; optional for senior): three to five bolded, quantified results across their career.
 4. **Experience:** most recent first. For each role: a heading `Role | Organization | Start – End`, one line of context (what the organization is, and the scope: team, budget, products, markets), then the bullets.
-5. **Education, skills and languages.**
+5. **Skills** (five at most), **Education** and **Languages**, each its own `##` section. Education is one entry per paragraph (blank line between): `Institution | Degree | Year | City, Country`. Languages are a comma list with the level in brackets: `English (native), Spanish (fluent)`.
 
 Supported format: `#` to `###` headings, plain paragraphs, `- ` lists and `**bold**`. Nothing else: no tables, links, italics or images. This keeps the PDF readable by ATS parsers.
+
+## Templates (the look of the PDF)
+
+The same Markdown can be built in three looks. The template only changes fonts, colours and spacing, never the words or their order, and every layout is a single column so ATS parsers read it in order.
+
+- **editorial** (default): serif, centred header, quiet. Suits executive, board-facing and traditional sectors.
+- **gutter**: modern sans with section names in a left column. Suits tech, product and engineering roles, and dense two-page CVs.
+- **banner**: colour header band, skills as tags. Suits candidates who want more personality.
+- **classic**: the original plain layout.
+
+Each has an accent colour: navy, teal, burgundy, forest, plum, graphite, or any `#rrggbb`. The choice is stored in the workspace `cv-style.json` (`template` and `accent`), and `build-pdf --template` / `--accent` override it for one build. Use the same look for the CV and the cover letter.
 
 ## By career track
 
@@ -43,6 +54,7 @@ Three to five results that together show range: pick from different roles and di
 
 - **One voice throughout.** No "I", "me" or "my" anywhere, including the summary: "Builds engineering organizations that…" or a verbless phrase, not "I build teams…".
 - **Keep the header line short** so it fits on one line (under about 95 characters; `check-cv` warns): location, email, phone and one profile link. The headline has its own line above it.
+- **Five skills at most** (`check-cv` warns above five). Pick the five most relevant to the target role.
 - **Skills line by level.** For executive and senior candidates, list leadership and domain areas the bullets evidence (for example "Platform strategy, M&A integration, P&L ownership"). Leave detailed tools and languages out unless the role asks for them. This is a master CV decision: fix it in `master-cv.md`, not per role.
 - **Promotions within one employer:** one entry for the employer with both titles in the heading, most recent first: `VP Product (2019 – 2021), Head of Product (2017 – 2018) | Ledgerline`. Never show the later title for the whole period.
 - **Dates:** `Mon YYYY – Mon YYYY` (or `YYYY – YYYY` consistently) in role headings; `YYYY-MM` in experience files and INDEX.

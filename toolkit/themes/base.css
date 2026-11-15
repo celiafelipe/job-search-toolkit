@@ -1,0 +1,20 @@
+/* Shared by every CV template. Theme files set fonts, colours and layout on top. */
+@page { size: A4; margin: 15mm 18mm; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { -webkit-print-color-adjust: exact; print-color-adjust: exact; overflow-wrap: break-word; }
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+h1, h2, h3 { break-after: avoid; }
+li, p { break-inside: avoid; orphans: 3; widows: 3; }
+.role > h3 + .context { break-before: avoid; }
+.role > ul > li:first-child { break-before: avoid; }
+.edu-item, .langs li { break-inside: avoid; }
+.contact .item { white-space: nowrap; }
+h3 { display: flex; flex-wrap: wrap; align-items: baseline; }
+h3 .dates { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.tags, .langs { display: block; }
+.tags li, .langs li { display: inline-block; white-space: nowrap; }
+.edu-item > span { display: block; }
+.edu-item + .edu-item { margin-top: 2.2mm; }
+.edu-item .school { font-weight: 600; }

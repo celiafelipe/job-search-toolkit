@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TOP = {"README.md", "LICENSE", ".gitignore", "AGENTS.md", "CLAUDE.md", "CHANGELOG.md"}
 FOLDERS = {"toolkit", "skills", "templates", "docs", "tests", "examples", "tools",
            ".claude-plugin", ".codex-plugin", ".agents"}
-TEXT_EXTENSIONS = {".py", ".md", ".json"}
+TEXT_EXTENSIONS = {".py", ".md", ".json", ".css"}
 # README images: PNG only, in assets/, with no text chunks that could carry metadata.
 IMAGE_FOLDER, IMAGE_EXTENSIONS = "assets", {".png"}
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"

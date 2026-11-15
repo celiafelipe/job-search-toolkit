@@ -25,10 +25,16 @@ One line of context: what the organization is, its stage or size, and your scope
 
 Shorter entries for older roles: context and one or two results.
 
+## Skills
+
+Five areas at most, separated by commas: Area one, Area two, Area three
+
 ## Education
 
-Degree | Institution | Year
+Institution | Degree | Year | City, Country
 
-## Skills and languages
+Second institution | Degree | Year | City, Country
 
-Relevant expertise areas and languages with proficiency.
+## Languages
+
+Language (native), Language (fluent)

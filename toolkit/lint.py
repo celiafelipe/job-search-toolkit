@@ -2,7 +2,7 @@
 import json
 import re
 
-from . import core, pdf
+from . import core, cvtheme, pdf
 
 DATE_LINE = re.compile(r"^\s*-?\s*`?\d{4}-\d{2}-\d{2}")
 SCREEN_KEYS = {"role_id", "score", "verdict", "hard_gaps", "unknowns", "rationale"}
@@ -33,6 +33,15 @@ def cv_warnings(text, name="CV", markdown=True):
     words = sorted({m.group(0).lower() for m in STYLE_WORDS.finditer(text)})
     if words:
         warnings.append(f"{name}: self-labels or AI-sounding words ({', '.join(words)}); let the bullets prove it")
+    skills = cvtheme.skill_count(text) if markdown else None
+    if skills:
+        count, with_languages = skills
+        if with_languages:
+            warnings.append(f"{name}: skills and languages share a section; give languages their own "
+                            "'## Languages' section so the templates can lay them out")
+        elif count > cvtheme.MAX_SKILLS:
+            warnings.append(f"{name}: {count} skills listed; keep the {cvtheme.MAX_SKILLS} most relevant "
+                            "to the target role")
     lines = [line for line in text.splitlines() if line.strip()]
     if markdown and len(lines) > 1 and not lines[1].startswith("#") and len(lines[1]) > 95:
         warnings.append(f"{name}: the header line is {len(lines[1])} characters and will wrap; keep it under 95")

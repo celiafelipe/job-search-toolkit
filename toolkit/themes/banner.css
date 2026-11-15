@@ -1,0 +1,33 @@
+/* Banner: colour header band, accent underlines, language chips. */
+@page { margin: 14mm 0; }
+@page :first { margin-top: 0; }
+body { color: #2f343b; font: 9.6pt/1.45 Inter, "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif; }
+header { background: var(--accent); color: #fff; padding: 11mm 16mm 9mm; }
+h1 { font-size: 24pt; font-weight: 700; letter-spacing: .01em; line-height: 1.1; }
+.headline { font-size: 11.2pt; font-weight: 600; color: color-mix(in srgb, #fff 72%, var(--accent)); margin-top: 1.6mm; }
+.contact { font-size: 8.6pt; color: color-mix(in srgb, #fff 66%, var(--accent)); margin-top: 3mm; }
+.contact .sep { opacity: .55; }
+.sec { padding: 0 16mm; margin-top: 5mm; }
+h2 { font-size: 9.4pt; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); padding-bottom: 1.6mm; margin-bottom: 2.6mm; position: relative; }
+h2::after { content: ""; position: absolute; left: 0; bottom: 0; width: 9mm; height: .6mm; background: color-mix(in srgb, var(--accent) 55%, #6aa3d8); }
+.sec-summary p { font-size: 10pt; line-height: 1.55; color: #3d434b; }
+.sec li { position: relative; padding-left: 4.5mm; margin: 1.1mm 0; }
+.sec li::before { content: "\2013"; position: absolute; left: 0; color: color-mix(in srgb, var(--accent) 55%, #6aa3d8); font-weight: 600; }
+.sec-achievements ul { background: color-mix(in srgb, var(--accent) 6%, #fff); border-radius: 2mm; padding: 2.4mm 4mm; }
+.role + .role { margin-top: 3.6mm; }
+h3 { font-size: 10.6pt; font-weight: 700; color: var(--accent); }
+h3 .sep { padding: 0 .45em; color: #aab1ba; font-weight: 400; }
+h3 .org { color: color-mix(in srgb, var(--accent) 55%, #6aa3d8); font-weight: 600; }
+h3 .dates { font-size: 8.6pt; color: #6b727b; font-weight: 600; }
+.context { color: #6b727b; font-size: 9pt; font-style: italic; margin: .4mm 0 .8mm; }
+strong { font-weight: 600; color: #1d2228; }
+.sec .tags li { padding: 0; margin: 0 0 1mm; color: var(--accent); font-weight: 600; font-size: 9.4pt; }
+/* Separate boxed tags read back as columns in plain-text extraction, so skills are one dotted line. */
+.sec .tags li + li::before { content: "\2022"; position: static; padding: 0 1.8mm 0 .9mm; color: color-mix(in srgb, var(--accent) 45%, #6aa3d8); }
+.sec .tags li:first-child::before, .sec .langs li::before { content: none; }
+.sec .langs li { padding: 0; margin: 0 4mm 1.4mm 0; }
+.langs .lang { display: inline-block; padding: .4mm 1.8mm; border-radius: 1.2mm; border: .3mm solid color-mix(in srgb, var(--accent) 40%, #fff); background: color-mix(in srgb, var(--accent) 6%, #fff); color: var(--accent); font-weight: 600; font-size: 8.6pt; }
+.langs .lvl { font-size: 8.8pt; font-style: italic; color: #6b727b; }
+.edu-item .school { color: var(--accent); font-weight: 700; }
+.edu-item .degree { color: color-mix(in srgb, var(--accent) 55%, #6aa3d8); font-weight: 600; }
+.edu-item .meta { color: #6b727b; font-size: 8.8pt; }

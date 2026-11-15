@@ -8,6 +8,7 @@ import subprocess
 import tempfile
 import unicodedata
 
+from . import cvtheme
 from .core import atomic, checked, inside, read, record, require
 
 CSS = """
@@ -227,7 +228,13 @@ def inline(value):
 PAPER = {"a4": "A4", "letter": "letter"}
 
 
-def html(blocks, paper="a4"):
+TEMPLATES = ("classic", *cvtheme.THEMES)
+
+
+def html(blocks, paper="a4", template="classic", accent=None, kind="cv"):
+    """The page Chrome prints. 'classic' is the original plain layout; the others are styled CV templates."""
+    if template != "classic":
+        return cvtheme.render(blocks, inline, plain, template, cvtheme.accent_colour(accent), PAPER[paper], kind)
     chunks = []
     for tag, values in blocks:
         body = "".join(f"<li>{inline(v)}</li>" for v in values) if tag == "ul" else inline(values[0])
@@ -242,14 +249,22 @@ def normalized(value):
     # Text extractors may drop or keep a hyphen where the PDF wrapped a line ("on-call" -> "oncall"
     # or "on- call"), so compare hyphenated words without their hyphens.
     value = re.sub(r"\s*[-\u2010\u2011\u2012\u2013]\s*", "", value)
+    # Templates may show list separators differently (a comma list as tags, "|" as a dot, "(native)" as a
+    # level label), so separators and brackets do not count: only the words must survive, in order.
+    value = re.sub(r"[|\u00b7\u2022,;:()]", " ", value)
     return " ".join(value.split())
 
 
+def compact(value):
+    """Normalized text without spaces: letter-spaced headings can come back as "E D U C AT I O N"."""
+    return "".join(normalized(value).split())
+
+
 def analyze(blocks, extracted):
-    passages = [normalized(plain(p)) for _, values in blocks for p in values]
+    passages = [compact(plain(p)) for _, values in blocks for p in values]
     errors, warnings = [], []
     for mode, contents in extracted.items():
-        contents = normalized(contents)
+        contents = compact(contents)
         cursor = 0
         out_of_order = []
         for index, passage in enumerate(passages, 1):
@@ -309,10 +324,20 @@ def check_source(root, source):
             "blocks": len(blocks)}
 
 
-def build(root, source, output, kind, paper="a4"):
+def style(root, template=None, accent=None):
+    """Template and accent for a build: explicit choice, else the workspace cv-style.json, else the default look."""
+    saved = read(root / "cv-style.json") if (root / "cv-style.json").is_file() else {}
+    template = template or saved.get("template") or cvtheme.DEFAULT_THEME
+    require(template in TEMPLATES, f"Unknown CV template '{template}': use one of {', '.join(TEMPLATES)}")
+    accent = cvtheme.accent_colour(accent or saved.get("accent"))
+    return template, accent
+
+
+def build(root, source, output, kind, paper="a4", template=None, accent=None):
     source = inside(root, source)
     output = inside(root, output, file=False)
     require(not output.exists() and output.parent.is_dir(), "Use a new build directory with an existing parent")
+    template, accent = style(root, template, accent)
     runtime = tools()
     require(all(runtime.values()), "PDF tools unavailable; run doctor")
     source_before = record(source)
@@ -322,7 +347,7 @@ def build(root, source, output, kind, paper="a4"):
         target = stage / "build"
         target.mkdir(mode=0o700)
         source_html = target / "document.html"
-        source_html.write_text(html(blocks, paper), encoding="utf-8")
+        source_html.write_text(html(blocks, paper, template, accent, kind), encoding="utf-8")
         pdf = target / "document.pdf"
         run(chrome(runtime["browser"], stage / "browser", pdf, source_html.as_uri()))
         require(pdf.is_file(), "Browser did not create PDF")
@@ -342,7 +367,8 @@ def build(root, source, output, kind, paper="a4"):
         require(record(source) == source_before, "Source changed during build")
         files = {f.name: {"path": str(output / f.name), "sha256": record(f)["sha256"]}
                  for f in target.iterdir() if f.is_file()}
-        receipt = {"schema": 1, "kind": kind, "paper": paper, "source": source_before,
+        receipt = {"schema": 1, "kind": kind, "paper": paper, "template": template, "accent": accent,
+                   "source": source_before,
                    "builder_sha256": record(Path(__file__))["sha256"],
                    "pages": [p.name for p in images], "files": files,
                    "recovery_warnings": warnings, "word_count": sum(len(v.split())
@@ -350,7 +376,8 @@ def build(root, source, output, kind, paper="a4"):
         atomic(target / "build.json", receipt)
         require(not output.exists(), "Build destination was created by another process")
         target.rename(output)
-    return {"build": str(output / "build.json"), "pages": pages, "recovery_warnings": warnings}
+    return {"build": str(output / "build.json"), "pages": pages, "template": template, "accent": accent,
+            "recovery_warnings": warnings}
 
 
 def verify(root, build_path, attachment, kind):
@@ -361,7 +388,8 @@ def verify(root, build_path, attachment, kind):
     source = checked(root, receipt["source"])
     files = {name: checked(root, item) for name, item in receipt["files"].items()}
     require(files["document.html"].read_text(encoding="utf-8") ==
-            html(parse(source.read_text(encoding="utf-8")), receipt.get("paper", "a4")),
+            html(parse(source.read_text(encoding="utf-8")), receipt.get("paper", "a4"),
+                 receipt.get("template", "classic"), receipt.get("accent"), kind),
             "Build HTML differs from current source")
     require(record(attachment)["sha256"] == receipt["files"]["document.pdf"]["sha256"],
             "Outgoing PDF differs from checked build")
