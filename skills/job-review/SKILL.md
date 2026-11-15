@@ -1,6 +1,6 @@
 ---
 name: job-review
-description: Independently review a prepared job application for evidence quality, exact answers, PDF rendering and ATS text recoverability before it can be transmitted.
+description: Independently review a prepared job application for evidence quality, exact answers, PDF rendering and ATS text recoverability before it can be transmitted. Use when someone asks "is my CV ready to send", "check my application before I send it" or "review this package".
 ---
 
 The toolkit root is two levels above this skill's folder (it contains `toolkit/`); run CLI commands from there with `--workspace "<workspace>"` (default `~/Documents/Job Search`). You run every command and write every file; explain outcomes to the candidate in plain language and never ask them to run Python or edit JSON.

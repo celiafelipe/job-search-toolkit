@@ -1,6 +1,6 @@
 ---
 name: job-apply
-description: Inspect an employer application form and execute a reviewed application only when the candidate has authorized the exact actions and scope.
+description: Inspect an employer application form and execute a reviewed application only when the candidate has authorized the exact actions and scope. Use when someone says "can you apply for me", "send it for me" or "submit my application".
 ---
 
 The toolkit root is two levels above this skill's folder (it contains `toolkit/`); run CLI commands from there with `--workspace "<workspace>"` (default `~/Documents/Job Search`). You run every command and write every file; explain outcomes to the candidate in plain language and never ask them to run Python or edit JSON.
