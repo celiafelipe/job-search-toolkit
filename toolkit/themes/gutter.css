@@ -1,0 +1,36 @@
+/* Gutter: modern sans, section labels in a left column, accent bar at the top. */
+@page { margin: 14mm 16mm 14mm 0; }
+@page :first { margin-top: 0; }
+body { color: #23262b; font: 9.6pt/1.45 "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif; }
+.cv { border-top: 2.2mm solid var(--accent); }
+header, .sec { display: grid; grid-template-columns: 46mm minmax(0, 1fr); }
+header > *, .sec > * { grid-column: 2; }
+header { padding-top: 12mm; padding-bottom: 3mm; }
+h1 { font-size: 25pt; font-weight: 600; letter-spacing: -.02em; line-height: 1.05; }
+.headline { font-size: 11pt; font-weight: 500; color: var(--accent); margin-top: 1.6mm; }
+.contact { color: #5d636c; font-size: 8.6pt; margin-top: 2.4mm; }
+.contact .sep { color: #b5bac2; }
+.sec { padding-top: 4.4mm; }
+.sec > h2 { grid-column: 1; grid-row: 1 / span 60; justify-self: end; align-self: start; text-align: right; white-space: nowrap; padding: .5mm 7mm 0 0; font-size: 7.6pt; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); line-height: 1.35; }
+.sec li { position: relative; padding-left: 4mm; margin: 1mm 0; }
+.sec li::before { content: ""; position: absolute; left: .3mm; top: .58em; width: 1.4mm; height: 1.4mm; background: var(--accent); opacity: .85; }
+.role + .role { margin-top: 3.4mm; }
+h3 { font-size: 10.2pt; font-weight: 600; }
+h3 .sep { padding: 0 .4em; color: #b5bac2; font-weight: 400; }
+h3 .org { color: var(--accent); }
+h3 .dates { font-size: 8.6pt; font-weight: 400; color: #5d636c; }
+.context { color: #5d636c; font-size: 9pt; margin: .5mm 0 .8mm; }
+.sec-summary p { font-size: 10pt; }
+.sec-achievements li { padding: 1.4mm 0 1.4mm 4mm; margin: 0; border-bottom: .5pt solid #e7e9ec; }
+.sec-achievements li:last-child { border: 0; }
+.sec-achievements li::before { top: 1.4mm; bottom: 1.4mm; height: auto; width: .8mm; }
+strong { font-weight: 600; color: #0f1216; }
+.sec .tags li, .sec .langs li { padding: 0; margin: 0 4mm .8mm 0; }
+.sec .tags li::before, .sec .langs li::before { content: none; }
+.langs .lang { font-weight: 600; }
+.langs .lvl { color: #5d636c; }
+.edu-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 4mm; }
+.edu-item .school { grid-column: 1; }
+.edu-item .degree { grid-column: 1; color: var(--accent); }
+.edu-item .meta { grid-column: 2; grid-row: 2; font-size: 8.6pt; color: #5d636c; }
+.edu-item + .edu-item { margin-top: 1.8mm; }

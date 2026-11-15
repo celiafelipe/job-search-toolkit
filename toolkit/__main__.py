@@ -31,6 +31,10 @@ def parser():
     build.add_argument("output")
     build.add_argument("--kind", choices=("cv", "letter"), required=True)
     build.add_argument("--paper", choices=("a4", "letter"), default="a4", help="Page size (default a4)")
+    build.add_argument("--template", choices=pdf.TEMPLATES,
+                       help="Look of the PDF (default: template in cv-style.json, else editorial)")
+    build.add_argument("--accent", help="Accent colour: navy, teal, burgundy, forest, plum, graphite or #rrggbb "
+                                        "(default: accent in cv-style.json, else navy)")
     commands.add_parser("lint", help="Check the workspace files the agent maintains (rubric, INDEX, provenance, screenings)")
     commands.add_parser("extract-text", help="Print the text of a CV the candidate supplied (.docx, .pdf, .txt, .md)"
                         ).add_argument("source")
@@ -101,7 +105,7 @@ def main(argv=None):
         elif c == "recover-lock":
             result = core.recover_lock(root, args.owner, args.evidence)
         elif c == "build-pdf":
-            result = pdf.build(root, args.source, args.output, args.kind, args.paper)
+            result = pdf.build(root, args.source, args.output, args.kind, args.paper, args.template, args.accent)
         elif c == "lint":
             result = lint.run(root)
         elif c == "extract-text":
