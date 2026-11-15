@@ -79,11 +79,11 @@ You talk to one assistant in plain language; it picks the right skill for each s
 | Skill | What it does | Say something like |
 | --- | --- | --- |
 | [job-search](skills/job-search/SKILL.md) | Entry point. Works out where you are and routes to the right step. | "Help with my job search" / "Continue my job search" |
-| [job-starter](skills/job-starter/SKILL.md) | First-time setup: checks your computer, creates your private folder, imports your CV or LinkedIn PDF, asks what you're looking for. | "Set up my job search" |
+| [job-starter](skills/job-starter/SKILL.md) | First-time setup: checks your computer, creates your private folder, imports your CV or LinkedIn PDF, asks what you're looking for, and shows your CV in each of the three templates so you can pick a look and colour. | "Set up my job search" / "Show me the CV templates" |
 | [career-interview](skills/career-interview/SKILL.md) | A 20-minute guided interview, one role at a time, that captures the stories and numbers behind your CV. | "Interview me about my career" / "Let's do my most recent role" |
 | [job-discover](skills/job-discover/SKILL.md) | Finds postings from links you share, saved jobs, job alert emails, approved job boards and career pages. Removes duplicates and writes a ranked inbox. | "Find roles that match my criteria" / "Check my job alerts" |
 | [job-screen](skills/job-screen/SKILL.md) | Pursue, hold or skip verdict against your own criteria, what's strong, what's thin, and two or three questions to fill the gaps. | "Is this a good fit?" plus a link or text |
-| [job-prepare](skills/job-prepare/SKILL.md) | A tailored, truthful CV and a checked PDF, with a summary of changes and interview talking points. Cover letter or form answers only if the application needs them. If you keep your own CV design, it gives feedback instead and never edits your file. | "Tailor my CV for this role" / "I'd rather keep my own CV design" |
+| [job-prepare](skills/job-prepare/SKILL.md) | A tailored, truthful CV and a checked PDF in the template you chose (editorial, gutter or banner), with a summary of changes and interview talking points. Cover letter or form answers only if the application needs them. If you keep your own CV design, it gives feedback instead and never edits your file. | "Tailor my CV for this role" / "Use the banner template in teal" / "I'd rather keep my own CV design" |
 | [job-review](skills/job-review/SKILL.md) | An independent review in a fresh context: evidence, exact answers, PDF rendering and whether application systems can read it. | "Check this application before I send it" |
 | [job-apply](skills/job-apply/SKILL.md) | Fills and submits an application form, only for the exact actions you've authorized ([rules](docs/APPLY.md)). | "Apply for me" |
 | [job-track](skills/job-track/SKILL.md) | Records applications, prevents duplicates and shows where everything stands. | "I applied to X" / "Where are my applications?" |
@@ -124,6 +124,7 @@ Details: [host scheduling](skills/job-autopilot/references/host-scheduling.md).
 Documents/Job Search/
   profile.md              who you are, your career track, what to keep private
   master-cv.md            your master CV (never edited when tailoring)
+  cv-style.json           the CV template and accent colour you picked
   my-cv/                  or, if you prefer, your own designed CV PDF (never changed)
   career-story.md         the narrative that connects your roles
   experience/             one file per role: context, achievements, stories, lessons
@@ -148,7 +149,7 @@ Everything stays on your computer. Your assistant's provider processes what you 
 - Python 3.9 or newer (the one built into macOS works), plus Google Chrome or Chromium and Poppler for PDF export. Setup checks these and offers to install anything missing.
 - The toolkit doesn't log in to job sites, solve CAPTCHAs or bypass any site's rules. When a site needs a login, it hands over to you.
 - PDF export runs Chrome headless with a fresh profile and networking blocked, so your CV never leaves your computer during the build. In Linux containers running as root, Chrome's sandbox is disabled for this local page only. If `doctor` reports that the test export fails, it prints the fix (often installing Chrome's lightweight headless build).
-- The PDF uses a clean single-column layout designed to be read correctly by applicant tracking systems. No tool can guarantee how a specific employer's system parses it.
+- The PDF comes in three templates (editorial, gutter and banner) with six accent colours or your own. All three keep a single-column layout, inline dates and plain-text skills so applicant tracking systems read them in the right order, and every build checks that the PDF text reads back in order. No tool can guarantee how a specific employer's system parses it.
 
 ## For developers
 
