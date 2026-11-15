@@ -79,6 +79,71 @@ class BetaFindings(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "already exists"):
                 core.init(root, demo=False)
 
+    def test_init_ignores_hidden_entries_only(self):
+        with tempfile.TemporaryDirectory() as temp:
+            hidden = Path(temp) / "hidden"
+            (hidden / ".claude").mkdir(parents=True)
+            (hidden / ".claude" / "settings.local.json").write_text("{}", encoding="utf-8")
+            (hidden / ".DS_Store").write_text("", encoding="utf-8")
+            core.init(core.workspace(hidden, initialized=False), demo=False)
+            self.assertTrue((hidden / "ledger.json").exists())
+            visible = Path(temp) / "visible"
+            visible.mkdir()
+            (visible / "notes.txt").write_text("x", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "already contains files"):
+                core.init(core.workspace(visible, initialized=False), demo=False)
+
+    def test_init_leaves_existing_hidden_entries_and_symlink_targets_alone(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "ws"
+            hook = root / ".claude" / "hooks" / "check.sh"
+            hook.parent.mkdir(parents=True)
+            hook.write_text("#!/bin/sh\n", encoding="utf-8")
+            hook.chmod(0o755)
+            outside = Path(temp) / "outside.txt"
+            outside.write_text("x", encoding="utf-8")
+            outside.chmod(0o644)
+            (root / ".link").symlink_to(outside)
+            hooks_mode = hook.parent.stat().st_mode & 0o777
+            core.init(core.workspace(root, initialized=False), demo=False)
+            self.assertEqual(hook.stat().st_mode & 0o777, 0o755)
+            self.assertEqual(hook.parent.stat().st_mode & 0o777, hooks_mode)
+            self.assertEqual(outside.stat().st_mode & 0o777, 0o644)
+            self.assertEqual(root.stat().st_mode & 0o077, 0)
+            for path in [root / "profile.md", root / "experience", root / "experience" / "INDEX.md"]:
+                self.assertEqual(path.stat().st_mode & 0o077, 0, path)
+
+    def test_licence_hint_on_macos_without_poppler(self):
+        from unittest import mock
+        runtime = {"browser": "/b", "pdfinfo": None, "pdftotext": None, "pdftoppm": None}
+        with mock.patch("sys.platform", "darwin"), mock.patch.object(pdf, "find_tool", return_value="/brew"):
+            hints = pdf.install_hints(runtime, licence_check=lambda: True)
+            self.assertTrue(any("xcodebuild -license accept" in h for h in hints))
+            hints = pdf.install_hints(runtime, licence_check=lambda: False)
+            self.assertFalse(any("xcodebuild" in h for h in hints))
+
+    def test_licence_check_needs_licence_failure_and_survives_missing_tool(self):
+        from unittest import mock
+        licence = b"You have not agreed to the Xcode license agreements."
+        stub = b"xcode-select: error: tool 'xcodebuild' requires Xcode, but active developer directory is a command line tools instance"
+        fake = lambda code, err=b"": (lambda *a, **k: mock.Mock(returncode=code, stdout=b"", stderr=err))
+        with mock.patch("shutil.which", return_value="/usr/bin/xcodebuild"):
+            self.assertTrue(pdf.xcode_licence_pending(runner=fake(69, licence)))
+            self.assertFalse(pdf.xcode_licence_pending(runner=fake(0)))
+            self.assertFalse(pdf.xcode_licence_pending(runner=fake(1, stub)))
+        with mock.patch("shutil.which", return_value=None):
+            self.assertFalse(pdf.xcode_licence_pending(runner=fake(69, licence)))
+
+    def test_pdf_source_without_poppler_explains(self):
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as temp:
+            root = core.workspace(Path(temp) / "ws", initialized=False)
+            core.init(root, demo=False)
+            (root / "sources" / "a.pdf").write_bytes(b"%PDF-1.4")
+            with mock.patch.object(pdf, "find_tool", return_value=None):
+                with self.assertRaisesRegex(ValueError, "Poppler.*not installed.*doctor"):
+                    pdf.extract_text(root, "sources/a.pdf")
+
     def test_timeout_message_suggests_fix(self):
         with self.assertRaisesRegex(ValueError, "JOBKIT_CHROME"):
             pdf.run([sys.executable, "-c", "import time; time.sleep(5)"], timeout=0.5)
