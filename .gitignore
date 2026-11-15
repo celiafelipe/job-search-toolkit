@@ -8,6 +8,7 @@ output/
 tmp/
 *.pdf
 *.png
+!assets/*.png
 *.sqlite*
 ledger.json
 .ledger.lock
