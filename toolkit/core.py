@@ -134,6 +134,9 @@ def init(root, demo):
         root.parent.mkdir(parents=True)
         root.parent.chmod(0o755)
     root.mkdir(mode=0o700, exist_ok=True)
+    # Hidden entries already there (for example an agent host's .claude/ with executable hooks)
+    # belong to someone else: never change their permissions or follow their symlinks.
+    existing = set(root.iterdir())
     for template in (ROOT / "templates").iterdir():
         if template.is_file():
             shutil.copyfile(template, root / template.name)
@@ -141,8 +144,17 @@ def init(root, demo):
             shutil.copytree(template, root / template.name)
     for folder in ("roles", "sources"):
         (root / folder).mkdir(exist_ok=True)
-    for path in [root, *root.rglob("*")]:
-        path.chmod(0o700 if path.is_dir() else 0o600)
+    root.chmod(0o700)
+    for top in root.iterdir():
+        if top in existing or top.is_symlink():
+            continue
+        top.chmod(0o700 if top.is_dir() else 0o600)
+        if top.is_dir():
+            for folder, dirs, files in os.walk(top):  # does not follow symlinks
+                for name in dirs + files:
+                    path = Path(folder) / name
+                    if not path.is_symlink():
+                        path.chmod(0o700 if path.is_dir() else 0o600)
     atomic(root / "ledger.json", {"schema": 1, "demo": demo, "browser_owner": None, "roles": {}})
     return str(root)
 

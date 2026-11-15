@@ -93,6 +93,26 @@ class BetaFindings(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "already contains files"):
                 core.init(core.workspace(visible, initialized=False), demo=False)
 
+    def test_init_leaves_existing_hidden_entries_and_symlink_targets_alone(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "ws"
+            hook = root / ".claude" / "hooks" / "check.sh"
+            hook.parent.mkdir(parents=True)
+            hook.write_text("#!/bin/sh\n", encoding="utf-8")
+            hook.chmod(0o755)
+            outside = Path(temp) / "outside.txt"
+            outside.write_text("x", encoding="utf-8")
+            outside.chmod(0o644)
+            (root / ".link").symlink_to(outside)
+            hooks_mode = hook.parent.stat().st_mode & 0o777
+            core.init(core.workspace(root, initialized=False), demo=False)
+            self.assertEqual(hook.stat().st_mode & 0o777, 0o755)
+            self.assertEqual(hook.parent.stat().st_mode & 0o777, hooks_mode)
+            self.assertEqual(outside.stat().st_mode & 0o777, 0o644)
+            self.assertEqual(root.stat().st_mode & 0o077, 0)
+            for path in [root / "profile.md", root / "experience", root / "experience" / "INDEX.md"]:
+                self.assertEqual(path.stat().st_mode & 0o077, 0, path)
+
     def test_licence_hint_on_macos_without_poppler(self):
         from unittest import mock
         runtime = {"browser": "/b", "pdfinfo": None, "pdftotext": None, "pdftoppm": None}
