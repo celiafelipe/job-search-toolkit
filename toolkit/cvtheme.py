@@ -32,6 +32,9 @@ SECTION_KINDS = (
     ("education", re.compile(r"education|qualification|degree", re.I)),
 )
 DATES = re.compile(r"\d")
+PIPE = re.compile(r"\s+\|\s+")
+ITEM_SEP = re.compile(r"\s*[,;·]\s*")
+BOLD = re.compile(r"\*\*.+?\*\*")
 LANGUAGE = re.compile(r"^(?P<lang>[^(:–-]+?)\s*(?:\((?P<a>[^)]+)\)|[:–-]\s*(?P<b>.+))$")
 
 
@@ -48,11 +51,24 @@ def section_kind(title):
     return next((kind for kind, pattern in SECTION_KINDS if pattern.search(title)), "other")
 
 
+def split(value, separator):
+    """Split at separators outside **bold** spans, so a split never leaves a lone `**` marker."""
+    bold = [m.span() for m in BOLD.finditer(value)]
+    parts, start = [], 0
+    for match in separator.finditer(value):
+        if any(a < match.end() and match.start() < b for a, b in bold):
+            continue
+        parts.append(value[start:match.start()])
+        start = match.end()
+    parts.append(value[start:])
+    return parts
+
+
 def items(values):
     """Skill or language items from a bullet list, or from comma- or semicolon-separated paragraphs."""
     found = []
     for value in values:
-        found.extend(part.strip() for part in re.split(r"\s*[,;·]\s*", value) if part.strip())
+        found.extend(part.strip() for part in split(value, ITEM_SEP) if part.strip())
     return found
 
 
@@ -78,7 +94,7 @@ def render(blocks, inline, plain, theme, accent, paper, kind="cv"):
             elif tag == "p":
                 cls = "contact" if n == last else "headline"
                 if cls == "contact":
-                    parts = [inline(part) for part in re.split(r"\s+\|\s+", values[0])]
+                    parts = [inline(part) for part in split(values[0], PIPE)]
                     body = '<span class="sep"> · </span>'.join(f'<span class="item">{p}</span>' for p in parts)
                 else:
                     body = inline(values[0])
@@ -127,7 +143,7 @@ def block(tag, values, inline, cls=None):
 
 
 def role_heading(value, inline):
-    parts = re.split(r"\s+\|\s+", value)
+    parts = split(value, PIPE)
     if len(parts) < 2:
         return f'<h3><span class="title">{inline(value)}</span></h3>'
     dates = parts.pop() if len(parts) >= 3 or DATES.search(parts[-1]) else None
@@ -160,7 +176,7 @@ def section_body(kind, body, inline):
         entries = []
         for tag, values in body:
             for value in values:
-                parts = re.split(r"\s+\|\s+", value)
+                parts = split(value, PIPE)
                 names = ("school", "degree")
                 html = "".join(f'<span class="{names[n]}">{inline(p)}</span>' for n, p in enumerate(parts[:2]))
                 if len(parts) > 2:

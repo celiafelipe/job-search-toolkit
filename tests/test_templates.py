@@ -47,6 +47,25 @@ Example College | BSc Mathematics | 2012 | Porto, Portugal
 Portuguese (native), English (fluent), French: basic
 """
 
+BOLD_CV = """# Avery Example
+
+avery@example.org | **example.org | avery**
+
+## Experience
+
+### **Head | Product** | Orchard Co | 2020 – 2024
+
+- Ran the product team.
+
+## Skills
+
+**Product strategy, Pricing**, Discovery
+
+## Education
+
+**University of Example | Lisbon** | MSc Economics | 2014
+"""
+
 
 class Rendering(unittest.TestCase):
     def render(self, template):
@@ -88,6 +107,16 @@ class Rendering(unittest.TestCase):
         with self.assertRaises(ValueError):
             pdf.html(pdf.parse(CV), "a4", "fancy")
 
+    def test_separators_inside_bold_do_not_split(self):
+        self.assertEqual(cvtheme.split("**a | b** | c", cvtheme.PIPE), ["**a | b**", "c"])
+        self.assertEqual(cvtheme.items(["**Product strategy, Pricing**, Discovery"]),
+                         ["**Product strategy, Pricing**", "Discovery"])
+        page = pdf.html(pdf.parse(BOLD_CV), "a4", "editorial")
+        self.assertNotIn("**", page)
+        self.assertIn("<li><strong>Product strategy, Pricing</strong></li>", page)
+        self.assertIn('<span class="school"><strong>University of Example | Lisbon</strong></span>', page)
+        self.assertIn('<span class="title"><strong>Head | Product</strong></span>', page)
+
     def test_read_back_ignores_letter_spacing_and_separators(self):
         blocks = pdf.parse("## Education\n\nUniversity of Example | MSc Economics | 2014\n\n"
                            "## Languages\n\nEnglish (native), French (fluent)\n")
@@ -119,6 +148,15 @@ class RealBuilds(unittest.TestCase):
                 self.assertEqual(result["template"], template)
                 receipt = pdf.verify(root, Path(result["build"]), root / f"build-{template}" / "document.pdf", "cv")
                 self.assertEqual((receipt["template"], receipt["accent"]), (template, "#5b3f86"))
+
+    def test_bold_text_with_separators_builds(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp).resolve() / "ws"
+            core.init(root, demo=True)
+            (root / "bold.md").write_text(BOLD_CV, encoding="utf-8")
+            for template in cvtheme.THEMES:
+                result = pdf.build(root, "bold.md", f"bold-{template}", "cv", template=template)
+                self.assertEqual(result["template"], template)
 
     def test_workspace_config_sets_the_default_look(self):
         with tempfile.TemporaryDirectory() as temp:
