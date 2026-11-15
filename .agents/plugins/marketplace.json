@@ -1,0 +1,20 @@
+{
+  "name": "job-search-toolkit",
+  "interface": {
+    "displayName": "Job Search Toolkit"
+  },
+  "plugins": [
+    {
+      "name": "job-search-toolkit",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

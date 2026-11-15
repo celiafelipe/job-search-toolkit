@@ -9,14 +9,29 @@ from urllib.parse import urlsplit
 ROOT = Path(__file__).resolve().parents[1]
 TOP = {"README.md", "LICENSE", ".gitignore", "AGENTS.md", "CLAUDE.md", "CHANGELOG.md"}
 FOLDERS = {"toolkit", "skills", "templates", "docs", "tests", "examples", "tools",
-           ".claude-plugin", ".codex-plugin"}
+           ".claude-plugin", ".codex-plugin", ".agents"}
 TEXT_EXTENSIONS = {".py", ".md", ".json"}
+# README images: PNG only, in assets/, with no text chunks that could carry metadata.
+IMAGE_FOLDER, IMAGE_EXTENSIONS = "assets", {".png"}
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+PNG_TEXT_CHUNKS = (b"tEXt", b"zTXt", b"iTXt", b"eXIf")
 EMAIL = re.compile(r"[A-Z0-9._%+-]+@([A-Z0-9.-]+\.[A-Z]{2,})", re.I)
 URL = re.compile(r"https?://[^\s'\"><)`]+")
 SENSITIVE = re.compile(
     r"(?:/Users/[A-Z0-9._-]+/|/home/[A-Z0-9._-]+/|[A-Z]:\\Users\\[A-Z0-9._-]+|"
     r"\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[A-Z0-9]{16})\b|"
     r"-----BEGIN [A-Z ]*PRIVATE " r"KEY-----)", re.I)
+# The only real links allowed: the project's own repository and its author credit, in the README.
+PUBLIC_LINKS = {
+    "README.md": {"github.com/celiafelipe/job-search-toolkit",
+                  "www.linkedin.com/in/celiafelipe"},
+}
+
+
+def public_link(link, allowed):
+    bare = link.split("://", 1)[-1]
+    return link.startswith("https://") and any(bare == base or bare.startswith(base + "/")
+                                                for base in allowed)
 
 
 def safe_domain(host):
@@ -38,6 +53,13 @@ def scan():
         if p.is_symlink() or not p.is_file():
             failures.append(f"{rel}: not an ordinary release file")
             continue
+        if rel.parts[0] == IMAGE_FOLDER and len(rel.parts) == 2 and rel.suffix in IMAGE_EXTENSIONS:
+            data = p.read_bytes()
+            if not data.startswith(PNG_SIGNATURE):
+                failures.append(f"{rel}: not a PNG file")
+            elif any(chunk in data for chunk in PNG_TEXT_CHUNKS):
+                failures.append(f"{rel}: PNG carries text or EXIF metadata")
+            continue
         if str(rel) not in TOP and not (len(rel.parts) >= 2 and rel.parts[0] in FOLDERS
                                         and rel.suffix in TEXT_EXTENSIONS):
             failures.append(f"{rel}: outside release file allowlist")
@@ -51,7 +73,9 @@ def scan():
             failures.append(f"{rel}: possible personal path or secret")
         if any(not safe_domain(domain) for domain in EMAIL.findall(contents)):
             failures.append(f"{rel}: email outside a reserved example domain")
+        allowed = PUBLIC_LINKS.get(str(rel), set())
         if any((host := urlsplit(link.rstrip(".,")).hostname) and not safe_domain(host)
+               and not public_link(link.rstrip(".,"), allowed)
                for link in URL.findall(contents)):
             failures.append(f"{rel}: URL outside a reserved example domain")
     return len(paths), failures
