@@ -14,6 +14,7 @@ This repository is a toolkit of agent skills (`skills/*/SKILL.md`) plus a small 
 
 ## When you are changing this repository
 
-- Run `python3 -m unittest discover -s tests` and `python3 tools/privacy_check.py` before proposing a commit.
+- Run `python3 -m unittest discover -s tests`, `python3 tools/privacy_check.py` and `python3 tools/check_version_bump.py` before proposing a commit.
 - Keep all examples fictional and use reserved domains (`example.org`, `*.example`). No real names, employers or personal paths.
+- When a change will be shared with users, bump `version` in both `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` and add a plain-language entry to `CHANGELOG.md`. Installed copies don't update unless the version changes. A GitHub check blocks pull requests that change `skills/`, `toolkit/`, `templates/` or `assets/` without a bump.
 - Skill files stay host-neutral Markdown with `name` and `description` frontmatter.

@@ -1,0 +1,20 @@
+name: Version check
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Versions match and are in the changelog
+        run: python3 -m unittest tests.test_version
+      - name: User-facing changes bump the version
+        run: python3 tools/check_version_bump.py origin/${{ github.base_ref }}

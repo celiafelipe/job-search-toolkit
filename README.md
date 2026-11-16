@@ -60,7 +60,14 @@ Any assistant that can read files and run commands works. Say:
 4. Builds your career files, then asks five short questions about what you're looking for.
 5. Shows you what's already strong and what's thin, and suggests the next step.
 
-To update later, refresh the marketplace in your app (or run `claude plugin marketplace update job-search-toolkit` / `codex plugin marketplace upgrade job-search-toolkit`).
+### Staying up to date
+
+The toolkit is improving quickly. See [what's new](CHANGELOG.md) in each version.
+
+- **Get updates automatically (recommended):** your app won't update the plugin on its own unless you switch this on. In Claude Code, run `/plugin`, open **Marketplaces**, choose **job-search-toolkit** and turn on auto-update. New versions then arrive the next time you start Claude.
+- **Update by hand:** refresh the marketplace in your app, or run `claude plugin marketplace update job-search-toolkit` (Claude Code) or `codex plugin marketplace upgrade job-search-toolkit` (Codex). Then start a new conversation.
+
+Not sure which version you have? Ask your assistant: "Which version of the job search toolkit am I using?"
 
 ## How it works
 
@@ -159,7 +166,10 @@ The skills are plain Markdown (`skills/*/SKILL.md`). One folder serves both Clau
 python3 -m unittest discover -s tests   # tests (the PDF test needs Chrome and Poppler)
 python3 examples/demo.py "$(mktemp -d)/private"   # fictional offline walkthrough
 python3 tools/privacy_check.py          # run before every commit: no personal data in the repo
+python3 tools/check_version_bump.py     # user-facing changes need a new version
 ```
+
+**Releasing an update.** Installed copies only update when the version number changes. For every release, raise `version` in both `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` (0.3.1 for fixes, 0.4.0 for new features) and add a matching section to [CHANGELOG.md](CHANGELOG.md). `tests/test_version.py` checks that the two match and are in the changelog, and `tools/check_version_bump.py` (also run on every pull request) fails if user-facing files changed without a new version.
 
 Contributions are welcome. Keep every example fictional and use reserved domains such as `example.org`.
 
