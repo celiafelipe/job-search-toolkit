@@ -166,10 +166,7 @@ The skills are plain Markdown (`skills/*/SKILL.md`). One folder serves both Clau
 python3 -m unittest discover -s tests   # tests (the PDF test needs Chrome and Poppler)
 python3 examples/demo.py "$(mktemp -d)/private"   # fictional offline walkthrough
 python3 tools/privacy_check.py          # run before every commit: no personal data in the repo
-python3 tools/check_version_bump.py     # user-facing changes need a new version
 ```
-
-**Releasing an update.** Installed copies only update when the version number changes. For every release, raise `version` in both `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` (0.3.1 for fixes, 0.4.0 for new features) and add a matching section to [CHANGELOG.md](CHANGELOG.md). `tests/test_version.py` checks that the two match and are in the changelog, and `tools/check_version_bump.py` (also run on every pull request) fails if user-facing files changed without a new version.
 
 Contributions are welcome. Keep every example fictional and use reserved domains such as `example.org`.
 
