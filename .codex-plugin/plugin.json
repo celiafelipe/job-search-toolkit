@@ -1,7 +1,7 @@
 {
   "name": "job-search-toolkit",
   "description": "An AI job-search partner for senior leaders: career evidence, job screening, truthful tailored CVs and tracked applications.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": {
     "name": "Job Search Toolkit contributors"
   },
